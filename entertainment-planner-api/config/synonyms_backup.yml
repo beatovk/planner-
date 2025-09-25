@@ -1,0 +1,38 @@
+version: 1
+synonyms:
+  # Food/Dishes
+  tom: [tom]
+  yum: [yam]
+  tom yum: [tom yam, tom-yum, tom-yam, tomyum]
+  brunch: [late breakfast, all day breakfast, all-day breakfast, brunch set, eggs benedict, pancakes, french toast, avocado toast]
+  vegan: [plant based, plant-based, vegan friendly]
+  vegetarian: [veggie friendly, meat-free, vegetarian friendly]
+  halal: [halal friendly]
+  gluten free: [gluten-free, gf]
+  izakaya: [japanese pub]
+  omakase: [chef choice, chef’s choice]
+
+  # Drinks
+  coffee: [café, cafe, coffee shop, specialty coffee, third wave, third-wave, espresso bar, roastery, pour over, pour-over, filter coffee]
+  craft_beer: [craft beer bar, taproom, microbrewery, micro-brewery, microbrew, ipa, pale ale, stout, porter, beer flight]
+  natural_wine: [natty wine, minimal intervention, skin-contact, orange wine, wine bar]
+  cocktail: [cocktails, cocktail bar, mixology bar, cocktail lab, speakeasy]
+
+  # Experiences & Places
+  rooftop: [roof-top, roof top, skybar, sky-bar, sky bar, rooftop bar, roof terrace, terrace bar, skyline, skyline view, panoramic view, sunset view]
+  park: [urban park, city park, public park, green space, garden, botanical garden]
+  park_walk: [park stroll, park walk, promenade, waterfront, riverfront, riverside, boardwalk]
+  live music: [live band, jazz club, jazz bar, acoustic set, gig, live show]
+  night market: [street market, street food market, night bazaar, bazaar]
+  rooftop cinema: [open air cinema, open-air cinema, outdoor cinema]
+  spa: [wellness, massage, day spa]
+  onsen: [hot spring, hot-spring, bathhouse]
+  river cruise: [boat dinner, dinner cruise, sunset cruise, river cruise dinner]
+
+  # Vibes / Intents
+  chill: [cozy, relaxed, calm, laid back, laid-back, low key, low-key, easygoing, mellow, unwind]
+  romantic: [date night, romantic spot, couple friendly, couples]
+  trendy: [hip, cool, fashionable, stylish]
+  scenic: [view, viewpoint, photo spot, instagrammable]
+
+

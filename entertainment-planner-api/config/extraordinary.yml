@@ -1,0 +1,125 @@
+version: "1.0"
+
+clusters:
+  vr_arena:
+    label: "VR arena"
+    keywords: ["vr", "virtual reality", "vr match", "vr arena", "vr game", "headset", "immersive vr"]
+  arcade_hybrid:
+    label: "Arcade hybrid"
+    keywords: ["arcade", "arcade-style", "arcade machines", "neon arcade", "coin-op"]
+
+  trampoline_park:
+    label: "Trampoline park"
+    keywords: ["trampoline", "free-jump", "bounce", "foam pit", "grip socks"]
+
+  karting:
+    label: "Karting"
+    keywords: ["karting", "go-kart", "go kart", "kart track"]
+
+  climbing_gym:
+    label: "Climbing"
+    keywords: ["climbing gym", "bouldering", "auto-belay", "top rope", "boulder"]
+
+  archery_range:
+    label: "Archery range"
+    keywords: ["archery", "bow range", "archery range"]
+
+  ice_skating:
+    label: "Ice skating"
+    keywords: ["ice rink", "ice skating", "skating rink"]
+
+  laser_tag:
+    label: "Laser tag"
+    keywords: ["laser tag"]
+
+  escape_room:
+    label: "Escape room"
+    keywords: ["escape room", "puzzle room", "escape game"]
+
+  vr_arcade:
+    label: "VR arena"
+    keywords: ["vr arena", "vr arcade", "vr zone"]
+
+  bowling_night:
+    label: "Bowling"
+    keywords: ["bowling", "bowling lane"]
+
+  billiards:
+    label: "Billiards"
+    keywords: ["billiards", "pool hall", "snooker"]
+
+  indoor_surf:
+    label: "Indoor surf"
+    keywords: ["flowrider", "indoor surf", "surf machine"]
+
+  wakeboarding_cable:
+    label: "Wakeboarding"
+    keywords: ["cable park", "wakeboarding", "wake park"]
+
+  skatepark_session:
+    label: "Skatepark"
+    keywords: ["skatepark", "skate park", "bowl", "halfpipe"]
+
+  planetarium:
+    label: "Planetarium"
+    keywords: ["planetarium", "star show", "astronomy dome"]
+
+  aquarium:
+    label: "Aquarium"
+    keywords: ["aquarium", "sea life", "ocean tunnel"]
+
+  observation_deck:
+    label: "Observation deck"
+    keywords: ["observation deck", "viewpoint", "skywalk", "observation tower"]
+
+  rooftop_viewpoint:
+    label: "Rooftop viewpoint"
+    keywords: ["rooftop view", "skyline view", "sunset rooftop", "skybar view"]
+
+  boat_cruise:
+    label: "Boat cruise"
+    keywords: ["boat cruise", "river cruise", "dinner cruise", "pier bar hop"]
+
+  khlong_kayak:
+    label: "Khlong kayak"
+    keywords: ["khlong kayak", "canal kayak", "kayak bangkok"]
+
+  sup_lesson:
+    label: "SUP lesson"
+    keywords: ["sup lesson", "standup paddle", "stand-up paddle"]
+
+  night_market_special:
+    label: "Night market special"
+    keywords: ["night market", "creative market", "vintage market", "rotfai"]
+
+  street_food_safari:
+    label: "Street food safari"
+    keywords: ["street food safari", "food crawl", "yaowarat seafood", "chinatown crawl"]
+
+  gallery_hop:
+    label: "Gallery hop"
+    keywords: ["gallery hop", "art cluster", "curator talk", "gallery program"]
+
+  indie_cinema:
+    label: "Indie cinema"
+    keywords: ["indie cinema", "arthouse cinema", "film marathon"]
+
+  workshops:
+    label: "Workshop"
+    keywords: ["workshop", "class", "course", "pottery", "ceramics", "leathercraft", "jewelry", "perfume", "candle making",
+               "screen printing", "photography walk", "watercolor", "calligraphy", "barista", "mixology", "sourdough",
+               "chocolate class", "cooking class"]
+
+  urban_green:
+    label: "Urban green"
+    keywords: ["mangrove boardwalk", "botanical garden", "greenhouse", "birdwatch", "bang krachao", "bike loop"]
+
+quality_triggers:
+  michelin: ["michelin", "bib gourmand", "one star", "1 star", "starred"]
+  chef_table: ["chef's table", "omakase", "tasting menu"]
+  open_kitchen: ["open kitchen", "chef counter"]
+  craft_cocktail_lab: ["cocktail lab", "mixology lab", "degustation cocktail", "tasting flight cocktails"]
+  natural_wine_program: ["natural wine", "pet-nat", "orange wine", "biodynamic"]
+  specialty_coffee: ["specialty coffee", "manual brew", "pour-over", "pour over", "filter flight", "single origin", "roastery", "flagship roaster"]
+  curated_gallery: ["curated program", "curator talk", "gallery program"]
+  architecture_icon: ["architecture icon", "design award", "landmark architecture"]

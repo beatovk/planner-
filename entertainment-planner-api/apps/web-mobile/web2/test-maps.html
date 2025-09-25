@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Maps Test</title>
+    <style>
+        #map { height: 400px; width: 100%; }
+        .status { padding: 20px; font-family: Arial; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="status" id="status">Loading Google Maps API...</div>
+    <div id="map"></div>
+    
+    <script>
+        let map;
+        
+        // Функция инициализации карты
+        function initMap() {
+            const status = document.getElementById('status');
+            
+            try {
+                // Создаем карту
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 13,
+                    center: { lat: 13.7563, lng: 100.5018 }, // Бангкок
+                });
+                
+                // Добавляем маркер
+                new google.maps.Marker({
+                    position: { lat: 13.7563, lng: 100.5018 },
+                    map: map,
+                    title: 'Bangkok'
+                });
+                
+                status.innerHTML = '<span class="success">✅ Google Maps API works perfectly!</span>';
+                status.innerHTML += '<br>Map initialized, marker added, API key is valid.';
+                
+            } catch (error) {
+                status.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+                console.error('Google Maps error:', error);
+            }
+        }
+        
+        // Обработка ошибок API
+        window.gm_authFailure = function() {
+            document.getElementById('status').innerHTML = '<span class="error">❌ API Key Authentication Failed</span>';
+        };
+        
+        // Глобальная функция для callback
+        window.initMap = initMap;
+    </script>
+    
+    <!-- Загружаем Google Maps API -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjExK9M7wOu929zQNbnlFJ8kjr-QreP6w&callback=initMap">
+    </script>
+</body>
+</html>

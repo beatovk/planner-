@@ -1,0 +1,814 @@
+# Лексикон для AI парсера
+intents:
+  eat:
+    - eat
+    - food
+    - dinner
+    - lunch
+    - breakfast
+    - brunch
+    - restaurant
+    - bistro
+    - diner
+    - canteen
+    - thai
+    - tom_yum
+    - tom_yam
+    - pad_thai
+    - khao_soi
+    - som_tam
+    - isan
+    - street_food
+    - noodles
+    - curry
+    - grill
+    - bbq
+    - steak
+    - steakhouse
+    - seafood
+    - oyster
+    - sushi
+    - sashimi
+    - ramen
+    - udon
+    - soba
+    - yakitori
+    - izakaya
+    - donburi
+    - katsu
+    - japanese
+    - italian
+    - pizza
+    - pasta
+    - risotto
+    - gelato
+    - chinese
+    - dim_sum
+    - hotpot
+    - sichuan
+    - cantonese
+    - korean
+    - korean_bbq
+    - fried_chicken
+    - tteokbokki
+    - mexican
+    - tacos
+    - burrito
+    - quesadilla
+    - french
+    - bakery
+    - patisserie
+    - croissant
+    - indian
+    - biryani
+    - tandoori
+    - naan
+    - middle_eastern
+    - lebanese
+    - turkish
+    - greek
+    - mediterranean
+    - spanish
+    - tapas
+    - paella
+    - vietnamese
+    - pho
+    - banh_mi
+    - indonesia
+    - malaysian
+    - singaporean
+    - western
+    - fusion
+    - vegetarian
+    - vegan
+    - gluten_free
+    - halal
+    - kosher
+    - healthy
+    - organic
+    - farm_to_table
+    - fine_dining
+    - tasting_menu
+    - michelin
+    - omakase
+    - buffet
+    - fast_food
+    - casual_dining
+
+  drink:
+    - drink
+    - bar
+    - wine
+    - wine_bar
+    - cocktail
+    - cocktail_bar
+    - mixology
+    - tiki
+    - gin
+    - whisky
+    - whiskey
+    - tequila
+    - mezcal
+    - sake
+    - soju
+    - craft_beer
+    - taproom
+    - brewery
+    - cidery
+    - speakeasy
+    - rooftop
+    - skybar
+    - sky_bar
+    - lounge
+    - shisha
+    - hookah
+    - karaoke
+    - live_music
+    - jazz
+    - blues
+    - rock
+    - electronic
+    - techno
+    - house
+    - dj
+    - club
+    - nightclub
+    - afterparty
+    - late_night
+    - open_late
+    - coffee
+    - specialty_coffee
+    - espresso
+    - latte
+    - cappuccino
+    - filter
+    - pour_over
+    - aeropress
+    - cold_brew
+    - matcha
+    - tea
+    - boba
+    - milk_tea
+    - cafe
+    - café
+
+  relax:
+    - relax
+    - chill
+    - spa
+    - day_spa
+    - hammam
+    - onsen
+    - sauna
+    - steam
+    - jacuzzi
+    - hot_spring
+    - massage
+    - thai_massage
+    - aromatherapy
+    - foot_massage
+    - body_scrub
+    - facial
+    - wellness
+    - therapy
+    - detox
+    - meditation
+    - yoga
+    - pilates
+    - sound_bath
+    - breathwork
+    - gym
+    - fitness
+    - stretch
+
+  walk:
+    - walk
+    - stroll
+    - promenade
+    - riverwalk
+    - park
+    - botanical_garden
+    - green
+    - nature
+    - viewpoint
+    - skywalk
+    - bike
+    - cycling
+    - run
+    - jogging
+    - canal
+    - market
+    - night_market
+    - weekend_market
+    - street_market
+    - floating_market
+    - river_cruise
+    - boat
+    - ferry
+    - explore
+    - sightseeing
+    - photo_spot
+
+  culture:
+    - culture
+    - art
+    - museum
+    - gallery
+    - exhibition
+    - installation
+    - theater
+    - theatre
+    - cinema
+    - indie_cinema
+    - film_festival
+    - show
+    - performance
+    - concert
+    - opera
+    - ballet
+    - dance
+    - live_show
+    - classical
+    - traditional
+    - heritage
+    - history
+    - temple
+    - shrine
+    - church
+    - palace
+    - fortress
+    - monument
+    - landmark
+    - library
+    - bookshop
+    - bookstore
+    - planetarium
+    - aquarium
+    - science_museum
+    - children_museum
+
+  shopping:
+    - shopping
+    - shop
+    - mall
+    - plaza
+    - department_store
+    - market
+    - bazaar
+    - boutique
+    - vintage
+    - thrift
+    - concept_store
+    - design_store
+    - craft
+    - handmade
+    - souvenir
+    - gift
+    - luxury
+    - designer
+    - streetwear
+    - sneakers
+    - jewelry
+    - watch
+    - electronics
+    - home_decor
+    - furniture
+    - plant_shop
+    - flower_market
+
+phrases:
+  "tom yum": "tom_yum"
+  "tom yam": "tom_yam"
+  "pad thai": "pad_thai"
+  "khao soi": "khao_soi"
+  "street food": "street_food"
+  "korean bbq": "korean_bbq"
+  "craft beer": "craft_beer"
+  "wine bar": "wine_bar"
+  "cocktail bar": "cocktail_bar"
+  "specialty coffee": "specialty_coffee"
+  "cold brew": "cold_brew"
+  "live music": "live_music"
+  "night market": "night_market"
+  "weekend market": "weekend_market"
+  "floating market": "floating_market"
+  "sky bar": "rooftop"
+  "skybar": "rooftop"
+  "fine dining": "fine_dining"
+  "tasting menu": "tasting_menu"
+  "michelin star": "michelin"
+  "first date": "first_date"
+  "go on a date": "date"
+  "where to date": "date"
+  "date with girlfriend": "date"
+  "date with boyfriend": "date"
+  "open late": "open_late"
+  "open now": "open_now"
+  "pet friendly": "pet_friendly"
+  "kid friendly": "kid_friendly"
+  "hidden gem": "hidden_gem"
+  "surprise me": "surprise_me"
+  "something interesting": "something_interesting"
+  "something fun": "something_fun"
+  "near me": "near_me"
+  "around me": "near_me"
+  "close by": "near_me"
+
+typos:
+  coffe: coffee
+  cofee: coffee
+  cofeee: coffee
+  caffe: cafe
+  café: cafe
+  restaraunt: restaurant
+  resturant: restaurant
+  restraunt: restaurant
+  resaurant: restaurant
+  pizzza: pizza
+  sushii: sushi
+  ramenn: ramen
+  pastaa: pasta
+  stake: steak
+  stakehouse: steakhouse
+  craftbear: craft_beer
+  coctail: cocktail
+  coktail: cocktail
+  coktailbar: cocktail_bar
+  wiskey: whiskey
+  wiski: whiskey
+  saunna: sauna
+  messsage: massage
+  massge: massage
+  welness: wellness
+  yogga: yoga
+  planeterium: planetarium
+  musium: museum
+  gallary: gallery
+  karoke: karaoke
+  nighclub: nightclub
+  roofftop: rooftop
+  roftop: rooftop
+  skyebr: rooftop
+  boba_tea: boba
+  phoo: pho
+  banhmi: banh_mi
+  gelatto: gelato
+  croisan: croissant
+  izzakaya: izakaya
+  isann: isan
+  vegatarian: vegetarian
+  veagn: vegan
+  glutten_free: gluten_free
+
+scenarios:
+  date:
+    - date
+    - romantic
+    - couple
+    - girlfriend
+    - boyfriend
+    - candle
+    - candlelight
+    - sunset
+    - anniversary
+    - proposal
+    - engagement
+    - valentine
+    - two_of_us
+  first_date:
+    - first_date
+    - first-date
+    - firstdate
+    - first time
+    - get_to_know
+    - ice_breaker
+    - low_pressure
+  business:
+    - business
+    - meeting
+    - client
+    - corporate
+    - professional
+    - quiet
+    - private_room
+  family:
+    - family
+    - kids
+    - children
+    - stroller
+    - grandparents
+    - family_friendly
+    - playground
+  friends:
+    - friends
+    - group
+    - hangout
+    - birthday
+    - celebration
+    - reunion
+    - pregame
+  solo:
+    - solo
+    - alone
+    - me_time
+    - journal
+    - reading
+    - laptop
+    - remote_work
+  tourist:
+    - tourist
+    - sightseeing
+    - must_see
+    - checklist
+  rainy_day:
+    - rainy_day
+    - rain
+    - indoor
+  hangover:
+    - hangover
+    - recover
+    - comfort_food
+
+vibes:
+  romantic:
+    - romantic
+    - intimate
+    - cozy
+    - candle
+    - candlelight
+    - sunset
+    - wine
+    - champagne
+    - fine_dining
+    - elegant
+    - skyline
+    - view
+    - panoramic
+    - love
+    - passion
+    - sweet
+    - tender
+    - luxury
+    - sophisticated
+    - upscale
+    - quiet
+    - peaceful
+    - serene
+    - rooftop
+    - stunning_views
+    - couples
+    - anniversary
+    - proposal
+    - valentine
+    - candlelit
+    - wine_tasting
+    - champagne_brunch
+    - sunset_dinner
+    - moonlit
+    - starlit
+    - breathtaking
+    - magical
+    - enchanting
+    - dreamy
+    - perfect_for_two
+    - intimate_dining
+    - romantic_atmosphere
+    - special_occasion
+  chill:
+    - chill
+    - laid_back
+    - calm
+    - relaxed
+    - peaceful
+    - quiet
+    - serene
+    - comfy
+  lively:
+    - lively
+    - party
+    - dj
+    - music
+    - energetic
+    - vibrant
+    - upbeat
+    - dance
+  elegant:
+    - elegant
+    - sophisticated
+    - upscale
+    - premium
+    - refined
+    - classy
+    - posh
+  casual:
+    - casual
+    - informal
+    - easy_going
+    - comfortable
+  cozy:
+    - cozy
+    - warm
+    - intimate
+    - small
+    - nook
+    - homely
+  hipster:
+    - hipster
+    - indie
+    - artisanal
+    - craft
+    - vintage
+  artsy:
+    - artsy
+    - creative
+    - design
+    - gallery_like
+    - installation
+  scenic:
+    - scenic
+    - riverside
+    - lakeside
+    - garden
+    - rooftop
+    - sunset_view
+  hidden_gem:
+    - hidden_gem
+    - tucked_away
+    - offbeat
+    - underrated
+  budget:
+    - budget
+    - cheap
+    - affordable
+    - student
+    - value
+  luxury:
+    - luxury
+    - high_end
+    - michelin
+    - tasting_menu
+    - rare
+  instagrammable:
+    - instagrammable
+    - photo_spot
+    - aesthetic
+    - neon
+    - mural
+  non_romantic:
+    - brewery
+    - beer
+    - party
+    - loud
+    - crowded
+    - sports
+    - football
+    - soccer
+    - gaming
+    - arcade
+    - pool_hall
+    - billiards
+    - fast_food
+    - buffet
+    - family
+    - kids
+    - playground
+    - casual
+    - noisy
+    - bar
+    - pub
+    - club
+    - nightclub
+    - energetic
+    - tawandang
+    - german
+    - sports_bar
+    - gaming_bar
+    - arcade_bar
+    - pool_bar
+    - billiards_bar
+    - family_restaurant
+    - kids_friendly
+    - playground_bar
+    - casual_dining
+    - noisy_bar
+    - pub_grub
+    - club_music
+    - nightclub_vibe
+    - party_atmosphere
+    - loud_music
+    - crowded_bar
+    - sports_tv
+    - gaming_zone
+    - arcade_games
+    - pool_table
+    - billiards_table
+    - fast_casual
+    - buffet_style
+    - family_style
+    - kids_menu
+    - playground_area
+    - casual_vibe
+    - noisy_atmosphere
+    - bar_food
+    - pub_style
+    - club_style
+    - nightclub_style
+
+category_map:
+  # Food & cuisines
+  tom_yum: [thai, restaurant]
+  tom_yam: [thai, restaurant]
+  pad_thai: [thai, restaurant]
+  khao_soi: [thai, restaurant]
+  som_tam: [thai, restaurant]
+  isan: [thai, restaurant]
+  pho: [vietnamese, restaurant]
+  banh_mi: [vietnamese, restaurant]
+  ramen: [japanese, restaurant]
+  sushi: [japanese, restaurant]
+  sashimi: [japanese, restaurant]
+  izakaya: [japanese, izakaya]
+  yakitori: [japanese, restaurant]
+  pizza: [italian, restaurant]
+  pasta: [italian, restaurant]
+  tapas: [spanish, restaurant]
+  paella: [spanish, restaurant]
+  korean_bbq: [korean, restaurant]
+  biryani: [indian, restaurant]
+  tandoori: [indian, restaurant]
+  naan: [indian, restaurant]
+  dim_sum: [chinese, restaurant]
+  hotpot: [chinese, restaurant]
+  steak: [steakhouse, restaurant]
+  steakhouse: [steakhouse, restaurant]
+  seafood: [seafood, restaurant]
+  oysters: [seafood, restaurant]
+  bakery: [bakery, cafe]
+  patisserie: [bakery, cafe]
+  croissant: [bakery, cafe]
+  gelato: [dessert, cafe]
+  dessert: [dessert, cafe]
+  buffet: [buffet, restaurant]
+  street_food: [street_food, restaurant]
+  fine_dining: [fine_dining, restaurant]
+  tasting_menu: [fine_dining, restaurant]
+  michelin: [fine_dining, restaurant]
+  vegetarian: [vegetarian, restaurant]
+  vegan: [vegan, restaurant]
+  gluten_free: [gluten_free, restaurant]
+  halal: [halal, restaurant]
+  kosher: [kosher, restaurant]
+  healthy: [healthy, restaurant]
+  organic: [healthy, restaurant]
+
+  # Drinks & bars
+  rooftop: [bar, rooftop]
+  skybar: [bar, rooftop]
+  sky_bar: [bar, rooftop]
+  speakeasy: [bar, speakeasy]
+  wine_bar: [bar, wine_bar]
+  cocktail_bar: [bar, cocktail]
+  craft_beer: [bar, craft_beer]
+  taproom: [bar, craft_beer]
+  brewery: [bar, brewery]
+  sake: [bar, sake_bar]
+  soju: [bar, soju_bar]
+  shisha: [bar, shisha]
+  lounge: [bar, lounge]
+  karaoke: [bar, karaoke]
+  nightclub: [club, nightclub]
+  club: [club, nightclub]
+  live_music: [bar, live_music]
+  jazz: [bar, live_music]
+  dj: [club, nightclub]
+  late_night: [bar]
+  open_late: [bar]
+
+  # Coffee & tea
+  coffee: [cafe]
+  specialty_coffee: [cafe]
+  espresso: [cafe]
+  latte: [cafe]
+  cappuccino: [cafe]
+  filter: [cafe]
+  pour_over: [cafe]
+  aeropress: [cafe]
+  cold_brew: [cafe]
+  matcha: [cafe]
+  tea: [cafe]
+  boba: [cafe]
+
+  # Relax & wellness
+  spa: [spa]
+  day_spa: [spa]
+  massage: [spa]
+  thai_massage: [spa]
+  aromatherapy: [spa]
+  onsen: [spa]
+  sauna: [spa]
+  steam: [spa]
+  jacuzzi: [spa]
+  hot_spring: [spa]
+  facial: [spa]
+  yoga: [wellness]
+  meditation: [wellness]
+  pilates: [wellness]
+  gym: [fitness]
+  fitness: [fitness]
+
+  # Walk & outdoors
+  park: [park]
+  botanical_garden: [park]
+  skywalk: [walk]
+  riverwalk: [walk]
+  river_cruise: [walk]
+  boat: [walk]
+  night_market: [market]
+  weekend_market: [market]
+  street_market: [market]
+  floating_market: [market]
+  photo_spot: [walk]
+  viewpoint: [walk]
+  cycling: [walk]
+  bike: [walk]
+
+  # Culture & attractions
+  museum: [culture, museum]
+  gallery: [culture, gallery]
+  exhibition: [culture]
+  theater: [culture, theater]
+  theatre: [culture, theater]
+  cinema: [culture, cinema]
+  indie_cinema: [culture, cinema]
+  concert: [culture, concert]
+  opera: [culture, opera]
+  ballet: [culture, ballet]
+  temple: [culture, temple]
+  palace: [culture, palace]
+  planetarium: [culture, planetarium]
+  aquarium: [culture, aquarium]
+  library: [culture, library]
+  bookstore: [culture, bookstore]
+
+  # Shopping
+  mall: [shopping, mall]
+  department_store: [shopping, mall]
+  boutique: [shopping, boutique]
+  vintage: [shopping, vintage]
+  thrift: [shopping, thrift]
+  concept_store: [shopping, concept_store]
+  design_store: [shopping, design_store]
+  souvenir: [shopping, souvenir]
+  market: [shopping, market]
+  flower_market: [shopping, market]
+  luxury: [shopping, luxury]
+  streetwear: [shopping, streetwear]
+  sneakers: [shopping, sneakers]
+  electronics: [shopping, electronics]
+  home_decor: [shopping, home_decor]
+  furniture: [shopping, furniture]
+  plant_shop: [shopping, plant_shop]
+
+tag_hints:
+  rooftop: [view, skyline, sunset, panoramic, windy, date_spot, instagrammable]
+  wine_bar: [wine, sommelier, pairing, cheese, cozy]
+  cocktail: [signature, mixology, bar_counter, classics, speakeasy_vibe]
+  craft_beer: [taplist, ipa, stout, lager, tasting_flight]
+  speakeasy: [hidden_door, password, intimate, low_light]
+  live_music: [stage, band, acoustic, jazz_night, cover_charge]
+  nightclub: [dancefloor, dj, bottle_service, strobe]
+  cafe: [specialty, beans, roastery, quiet, laptop_friendly, brunch]
+  bakery: [fresh, croissant, pastry, butter, morning]
+  dessert: [sweet, cake, gelato, parfait]
+  thai: [authentic, spicy, street_style, local]
+  japanese: [omakase, sake_pairing, minimal, counter_seating]
+  italian: [pasta, pizza, trattoria, aperitivo]
+  korean: [bbq, kimchi, soju, shareable]
+  chinese: [dim_sum, tea, wok, banquet]
+  indian: [curry, tandoor, masala, vegetarian_friendly]
+  vietnamese: [herbs, pho, fresh, light]
+  seafood: [oyster, crab, prawns, market_price]
+  steakhouse: [dry_aged, ribeye, medium_rare, wine_pairing]
+  fine_dining: [tasting_menu, chef_table, michelin, course]
+  healthy: [salad, bowl, organic, low_cal]
+  vegan: [plant_based, dairy_free, cruelty_free]
+  gluten_free: [celiac_safe, alt_flour]
+  halal: [no_pork, certified]
+  kosher: [certified, dairy_meat_rules]
+  spa: [relaxing, aromatherapy, candle, quiet_zone]
+  onsen: [hot_pool, etiquette, nude_zone]
+  sauna: [dry_heat, steam, cold_plunge]
+  yoga: [mat, breath, flow, studio]
+  park: [green, shade, picnic, jog]
+  market: [bargain, local, night, crowd]
+  museum: [exhibit, curation, ticketed, guided]
+  gallery: [opening, vernissage, contemporary]
+  cinema: [indie, festival, recliner]
+  planetarium: [stars, show, projector]
+  aquarium: [ocean, tunnel, family]
+  instagrammable: [neon, mural, pastel, photospot]
+  hidden_gem: [offbeat, local_only, low_key]
+  open_late: [after_midnight, supper, late_bite]
+  sunset: [golden_hour, west_facing, view]
+  pet_friendly: [dogs_allowed, terrace]
+  kid_friendly: [high_chair, play_corner]

@@ -1,0 +1,258 @@
+version: 1
+updated: 2025-09-24
+
+# Rail policy profiles: light, non-breaking layer for vibe rails
+# Keys are (namespace, key), here we use namespace "vibe"
+
+rail_policy:
+  vibe:
+    chill:
+      include_any_tags:
+        - experience:spa
+        - experience:onsen
+        - experience:park_stroll
+        - experience:gallery
+        - experience:planetarium
+        - drink:tea_room
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+          - cuisine:*
+      prefer_signals:
+        noise_level_max: 0.45
+        crowd_factor_max: 0.5
+        vista_view: true
+      category_quota:
+        # at least one from each bucket if available
+        spa_onsen: [experience:spa, experience:onsen]
+        park_green: [experience:park_stroll, view:green]
+        tea_room_cafe_quiet: [drink:tea_room, specialty_coffee, quiet]
+      fallback_chain:
+        - experience:gallery
+        - experience:planetarium
+        - riverside_walk
+
+    romantic:
+      include_any_tags:
+        - experience:rooftop
+        - view:skyline
+        - view:riverside
+        - experience:river_cruise
+        - experience:gallery
+        - live_music:jazz
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        dateworthy: true
+        lighting:dim: true
+        noise_level_max: 0.6
+        vista_view: true
+      category_quota:
+        skyline_riverside: [view:skyline, view:riverside]
+        live_music_jazz: [live_music, jazz]
+        gallery_intimate: [experience:gallery, intimate]
+      fallback_chain:
+        - rooftop_cinema
+        - cocktail_class
+
+    lively:
+      include_any_tags:
+        - experience:live_music
+        - nightclub
+        - edm
+        - drink:cocktail_bar
+        - drink:craft_beer
+        - karaoke
+        - boat_party
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        noise_level_min: 0.6
+        crowd_factor_min: 0.6
+        trend_score_min: 0.4
+        late_night: true
+      category_quota:
+        live_music_bucket: [experience:live_music]
+        club_bucket: [nightclub, edm]
+        bar_bucket: [drink:cocktail_bar, drink:craft_beer]
+      fallback_chain:
+        - vinyl_bar
+        - open_mic
+        - comedy_night
+
+    artsy:
+      include_any_tags:
+        - experience:gallery
+        - museum
+        - art_space
+        - workshop
+        - cinema_indie
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        editor_pick: true
+        local_gem: true
+        novelty_score_min: 0.3
+      category_quota:
+        gallery_museum: [experience:gallery, museum]
+        workshop: [workshop, pottery_class, photography_walk]
+        indie_cinema: [cinema_indie]
+      fallback_chain:
+        - creative_market
+        - zine_bookshop
+
+    premium:
+      include_any_tags:
+        - premium_rooftop_bar
+        - luxury_spa_day
+        - hotel_lobby_bar
+        - wine_tasting
+        - chef_counter
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        quality_score_min: 0.6
+        editor_pick: true
+        vista_view: true
+        price:
+          - $$$
+          - $$$$
+      category_quota:
+        luxury_spa: [luxury_spa_day]
+        rooftop_sig: [premium_rooftop_bar]
+        tasting_wine: [wine_tasting, chef_counter]
+      fallback_chain:
+        - sky_observatory
+        - private_room_experience
+
+    nature:
+      include_any_tags:
+        - experience:park_stroll
+        - river_cruise_day
+        - bang_krachao_bike
+        - botanical_garden
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        vista_view: true
+        green: true
+        noise_level_max: 0.5
+      category_quota:
+        park: [experience:park_stroll]
+        river_bike: [river_cruise_day, bang_krachao_bike]
+        garden: [botanical_garden]
+      fallback_chain:
+        - mangrove_boardwalk
+        - city_day_viewpoints
+
+    family:
+      include_any_tags:
+        - experience:aquarium
+        - experience:theme_park
+        - experience:trampoline
+        - indoor_playground
+        - science_museum
+        - experience:ice_skating
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        kid_friendly: true
+        cleanliness: true
+        safety: true
+        crowd_factor_max: 0.7
+      category_quota:
+        activity_high_energy: [experience:trampoline, experience:ice_skating]
+        edu_science: [science_museum]
+        soft_play: [indoor_playground]
+      fallback_chain:
+        - mini_golf
+        - bowling_family
+
+    active:
+      include_any_tags:
+        - experience:climbing
+        - experience:karting
+        - experience:bowling
+        - wakeboard
+        - flowrider
+        - muay_thai_class
+        - vr_arena
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        crowd_factor_max: 0.8
+        novelty_score_min: 0.3
+        trend_score_min: 0.3
+      category_quota:
+        climb: [experience:climbing]
+        wheels: [experience:karting]
+        misc: [wakeboard, flowrider, vr_arena]
+      fallback_chain:
+        - archery
+        - laser_tag
+
+    hidden_gem:
+      include_any_tags:
+        - night_market_authentic
+        - talad_rotfai_vintage
+        - street_art_tour
+        - heritage_house
+        - vinyl_digs
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        local_gem: true
+        editor_pick_local: true
+        price_max: $$
+      category_quota:
+        market: [night_market_authentic, talad_rotfai_vintage]
+        heritage_art: [heritage_house, street_art_tour]
+        niche_hobby: [vinyl_digs]
+      fallback_chain:
+        - old_town_walk
+
+    instagrammable:
+      include_any_tags:
+        - design_cafe
+        - experience:art_space
+        - drink:tea_room
+        - rooftop_viewpoint
+        - immersive_installation
+        - retro_arcade
+      exclude_if_other_slots:
+        dish:
+          - category:restaurant
+      prefer_signals:
+        vista_view: true
+        instagrammable: true
+        lighting:
+          - bright
+          - neon
+        dateworthy: true
+      category_quota:
+        viewpoint: [rooftop_viewpoint]
+        design_space: [experience:art_space, design_cafe]
+        immersive: [immersive_installation, retro_arcade]
+      fallback_chain:
+        - murals_cluster
+
+globals:
+  if_query_has_dish:
+    exclude_for_vibe:
+      - category:restaurant
+      - cuisine:*
+    whitelist_tags:
+      - drink:tea_room
+      - specialty_coffee
+      - quiet
+
+
+

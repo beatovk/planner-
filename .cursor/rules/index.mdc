@@ -1,0 +1,111 @@
+---
+
+description: |
+Rules for building our mobile one-page SPA for Entertainment Planner.
+One HTML page, vanilla JS + CSS. Three horizontal rails from an ordered user query
+(“tom yum, spa, rooftop”). User selects cards with a heart; distances on other rails
+update from the last selected card. Talks only to our FastAPI /api/places/search.
+
+1. Code Organization
+web2/
+  index.html     # single page
+  app1.js         # state, rendering, actions, api
+  styles.css     # mobile styles & tokens
+  assets/        # logo, placeholder
+  README.md
+
+
+No frameworks, no bundlers. ES2020. Keep functions small.
+
+2. UI & Flow (Mobile-first)
+
+Top: brand, search input (“Type steps in order: tom yum, spa, rooftop”), Use my location chip.
+
+Selected bar: shows choice per step (chip toggles off).
+
+Rails (x3) stacked vertically: Step 1/2/3 from the ordered query.
+
+Each rail = horizontal scroll of cards (image, title, 3-sentence summary, tags, distance, Maps link, heart).
+
+Heart = choose single card per step; last choice becomes anchor; other rails show distances from it.
+
+Drawer “Route” lists chosen places in order (server route calc later).
+
+3. API Contract
+
+GET /api/places/search?q=<string>&limit=12 → array of:
+
+{id, name, summary, tags_csv, category, lat, lng, gmaps_url, image_url?}
+
+
+Backend returns only published.
+
+No client secrets, no direct Google APIs.
+
+4. State (app.js)
+state = {
+  steps: [{label, query, results:[], selected:null}, ...],
+  user: {lat:null, lng:null},
+  anchor: null   // {lat,lng,name,stepIndex}
+}
+
+
+Parse query by commas → ordered steps.
+
+5. Rendering Rules
+
+Templates: <template id="railTpl">, <template id="cardTpl">.
+
+Cards: max 6 tags from tags_csv. Distance text: X.XX km or —.
+
+Lazy images; placeholder if no image.
+
+Re-render only changed rail; full re-render allowed for MVP.
+
+6. Interactions
+
+Heart toggles selection (one per step).
+
+Update anchor to last selected → recompute distances (Haversine) for visible cards.
+
+Chip in “Selected” clears step selection (and anchor if same step).
+
+Maps link opens gmaps_url in new tab.
+
+7. Distance
+
+Client-side Haversine only:
+
+haversineM({lat,lng}, {lat,lng}) -> meters
+
+
+Format to km with 2 decimals. If coords missing → —.
+
+8. Resilience & Perf
+
+Sequential fetch per step; limit=12.
+
+Fetch timeout & error message in rail (“No items yet / error”).
+
+Touch targets ≥ 40px, aria-pressed on heart, aria-live="polite" on rails.
+
+9. Styling
+
+Mobile 375–430px.
+
+Rounded 16–18px, soft shadows, scroll-snap on rails.
+
+CSS vars in :root (--bg, --paper, --text, --muted, --accent, --card, --radius).
+
+10. Acceptance (MVP)
+
+One page renders three rails for query like tom yum, spa, rooftop.
+
+Selecting a card updates distances on other rails instantly.
+
+Selected bar shows picks; drawer lists them in order.
+
+Works without reload, without external keys, against /api/places/search.
+globs:
+alwaysApply: true
+---

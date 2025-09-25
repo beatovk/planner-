@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Entertainment Planner — Mood Style</title>
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+  <header class="topbar">
+        <div class="search">
+          <input id="queryInput" class="search__input" type="search"
+                 placeholder="Type your plans: tom yum, rooftop, spa" />
+        </div>
+        
+        <div class="search-controls">
+          <button id="highExpBtn" class="control-btn" title="High Experience Filter">✨</button>
+          <button id="vibeBtn" class="control-btn" title="Vibe">🎭</button>
+          <button id="homeLoc" class="control-btn" title="Home Location">🏠</button>
+          <button id="driftBtn" class="control-btn" title="Show Route on Map">Drift</button>
+        </div>
+    
+    <!-- Area selector скрыт - заменен на High Experience/Surprise Me режимы -->
+    
+    <div id="selectedBar" class="selected" style="display: none;">
+      <span class="selected__label">Selected:</span>
+      <div id="selectedChips" class="selected__chips"></div>
+    </div>
+  </header>
+
+  <main id="rails" class="rails" aria-live="polite">
+    <div class="empty-state">
+      <div class="empty-state__icon">🎯</div>
+      <h2 class="empty-state__title">Plan your evening</h2>
+      <p class="empty-state__description">Enter your plans above to discover amazing places</p>
+    </div>
+  </main>
+
+  <!-- Google Maps Container -->
+  <section id="mapContainer" class="map-container" style="display: none;">
+    <div class="map-header">
+      <h3 class="map-title">Your Route</h3>
+      <button id="closeMap" class="map-close-btn" title="Close Map">×</button>
+    </div>
+    <div id="map" class="google-map"></div>
+    <div class="map-info" id="mapInfo" style="display: none;">
+      <div class="route-stats" id="routeStats"></div>
+    </div>
+  </section>
+
+  <!-- Шаблон ряда -->
+  <template id="railTpl">
+    <section class="rail">
+      <div class="rail__header">
+        <h2 class="rail__title"></h2>
+        <span class="rail__hint">Swipe →</span>
+      </div>
+      <div class="rail__scroll">
+        <div class="rail__content"></div>
+      </div>
+    </section>
+  </template>
+
+  <!-- Шаблон карточки -->
+  <template id="cardTpl">
+    <article class="place-card">
+      <div class="place-card__image">
+        <img class="place-card__img" src="" alt="" loading="lazy"/>
+      </div>
+      <div class="place-card__content">
+        <button class="place-card__add-btn" aria-pressed="false" title="Add to route">+</button>
+        <h3 class="place-card__title"></h3>
+        <div class="place-card__badges"></div>
+        <p class="place-card__summary"></p>
+        <div class="place-card__why"></div>
+        <div class="place-card__tags"></div>
+        <div class="place-card__meta">
+          <span class="place-card__distance" data-dist>—</span>
+          <div class="place-card__rating" data-rating style="display: none;">
+            <span class="rating-star">⭐</span>
+            <span class="rating-value"></span>
+          </div>
+          <a class="place-card__maps" target="_blank" rel="noopener">📍 Maps</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <!-- Дровер маршрута -->
+  <section id="routeDrawer" class="drawer" aria-hidden="true">
+    <div class="drawer__content">
+      <div class="drawer__handle"></div>
+      <button class="drawer__close" id="closeRoute">✕</button>
+      <div class="drawer__inner">
+        <h2 class="drawer__title">Your evening plan</h2>
+        <ol id="routeList" class="route-list"></ol>
+        <button id="buildRoute" class="btn btn--primary">Build route</button>
+        <div id="routeResult" class="route"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vibe Drawer -->
+  <section id="vibeDrawer" class="drawer vibe-drawer" aria-hidden="true">
+    <div class="drawer__content">
+      <div class="drawer__handle"></div>
+      <button class="drawer__close" id="closeVibe">✕</button>
+      <div class="drawer__inner">
+        <h2 class="drawer__title">Choose your vibe</h2>
+        <div class="vibe-selector">
+          <div class="vibe-column">
+            <h3 class="vibe-column__title">Vibe</h3>
+            <div class="vibe-options" id="vibeOptions">
+              <button class="vibe-option" data-vibe="chill">😌 Chill</button>
+              <button class="vibe-option" data-vibe="romantic">💕 Romantic</button>
+              <button class="vibe-option" data-vibe="active">⚡ Active</button>
+              <button class="vibe-option" data-vibe="artsy">🎨 Artsy</button>
+              <button class="vibe-option" data-vibe="classy">✨ Classy</button>
+              <button class="vibe-option" data-vibe="scenic">🌅 Scenic</button>
+              <button class="vibe-option" data-vibe="nightlife">🌙 Nightlife</button>
+              <button class="vibe-option" data-vibe="family">👨‍👩‍👧‍👦 Family</button>
+              <button class="vibe-option" data-vibe="trendy">🔥 Trendy</button>
+              <button class="vibe-option" data-vibe="cozy">🏠 Cozy</button>
+            </div>
+          </div>
+          <div class="vibe-column">
+            <h3 class="vibe-column__title">Energy</h3>
+            <div class="energy-options" id="energyOptions">
+              <button class="energy-option" data-energy="low">🔇 Low</button>
+              <button class="energy-option" data-energy="medium">🔊 Medium</button>
+              <button class="energy-option" data-energy="high">📢 High</button>
+            </div>
+          </div>
+        </div>
+        <div class="vibe-actions">
+          <button id="cancelVibe" class="btn btn--secondary">Cancel</button>
+          <button id="applyVibe" class="btn btn--primary" disabled>Apply</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="./app1.js" defer></script>
+  <!-- Google Maps JavaScript API will be loaded dynamically -->
+</body>
+</html>

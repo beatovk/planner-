@@ -1,0 +1,402 @@
+# Entertainment Planner — vibes.yml (ontology)
+# Единый конфиг вайбов/сценариев/типов опыта и модификаторов.
+# Применяется для Netflix-style ранжирования и интерпретации запросов.
+
+version: "2.0"
+
+# -----------------------------
+# ВАЙБЫ (атмосфера/стилистика)
+# -----------------------------
+vibes:
+  - id: "chill"
+    aliases: ["relaxed", "calm", "peaceful", "quiet", "serene", "tranquil"]
+    boost_default: 1.0
+    diversity_group: "atmosphere"
+
+  - id: "romantic"
+    aliases: ["intimate", "couple", "date", "love", "candlelit", "cozy"]
+    boost_default: 1.2
+    diversity_group: "atmosphere"
+
+  - id: "lively"
+    aliases: ["energetic", "vibrant", "bustling", "active", "dynamic", "exciting"]
+    boost_default: 1.1
+    diversity_group: "atmosphere"
+
+  - id: "artsy"
+    aliases: ["creative", "artistic", "cultural", "gallery", "museum", "exhibition"]
+    boost_default: 1.0
+    diversity_group: "culture"
+
+  - id: "premium"
+    aliases: ["luxury", "upscale", "high-end", "exclusive", "sophisticated", "elegant"]
+    boost_default: 1.3
+    diversity_group: "price"
+
+  - id: "local"
+    aliases: ["authentic", "traditional", "thai", "street", "local", "genuine"]
+    boost_default: 1.0
+    diversity_group: "authenticity"
+
+  - id: "hidden_gem"
+    aliases: ["secret", "undiscovered", "offbeat", "unique", "special", "rare", "tucked_away", "underrated"]
+    boost_default: 1.5
+    diversity_group: "novelty"
+
+  - id: "trendy"
+    aliases: ["hip", "cool", "modern", "contemporary", "fashionable", "stylish"]
+    boost_default: 1.1
+    diversity_group: "style"
+
+  - id: "cozy"
+    aliases: ["warm", "comfortable", "homey", "snug", "intimate", "welcoming"]
+    boost_default: 1.0
+    diversity_group: "atmosphere"
+
+  - id: "scenic"
+    aliases: ["beautiful", "picturesque", "stunning", "breathtaking", "rooftop", "view", "skyline", "panoramic"]
+    boost_default: 1.2
+    diversity_group: "location"
+
+  - id: "instagrammable"
+    aliases: ["aesthetic", "photo_spot", "design_driven", "pastel", "neon"]
+    boost_default: 1.1
+    diversity_group: "style"
+
+# -----------------------------
+# СЦЕНАРИИ (use-cases/контекст)
+# -----------------------------
+scenarios:
+  - id: "date"
+    aliases: ["romantic", "couple", "anniversary", "valentine", "dinner_date"]
+    boost_default: 1.3
+    diversity_group: "social"
+
+  - id: "first_date"
+    aliases: ["new_relationship", "meeting", "introduction", "getting_to_know", "ice_breaker"]
+    boost_default: 1.4
+    diversity_group: "social"
+
+  - id: "friends"
+    aliases: ["group", "gang", "buddies", "mates", "crew", "squad", "celebration"]
+    boost_default: 1.1
+    diversity_group: "social"
+
+  - id: "solo"
+    aliases: ["alone", "me_time", "personal", "individual", "self"]
+    boost_default: 1.0
+    diversity_group: "social"
+
+  - id: "birthday"
+    aliases: ["celebration", "party", "special", "milestone", "anniversary"]
+    boost_default: 1.2
+    diversity_group: "occasion"
+
+  - id: "afterwork"
+    aliases: ["work_drinks", "happy_hour", "unwind", "decompress", "office"]
+    boost_default: 1.0
+    diversity_group: "timing"
+
+  - id: "rainy_day"
+    aliases: ["rain", "indoor", "bad_weather"]
+    boost_default: 1.0
+    diversity_group: "context"
+
+  - id: "remote_work"
+    aliases: ["laptop", "quiet_tables", "power_outlets", "wifi", "work_friendly"]
+    boost_default: 1.1
+    diversity_group: "use_case"
+
+  - id: "family_with_kids"
+    aliases: ["kids_friendly", "stroller", "high_chair", "play_corner", "family"]
+    boost_default: 1.1
+    diversity_group: "social"
+
+# -----------------------------------
+# ТИПЫ ОПЫТА (experience categories)
+# -----------------------------------
+experiences:
+  - id: "rooftop"
+    aliases: ["sky", "high", "elevated", "terrace", "penthouse", "view", "skyline"]
+    boost_default: 1.3
+    diversity_group: "location"
+
+  - id: "planetarium"
+    aliases: ["space", "stars", "astronomy", "science", "educational", "learning", "space_show"]
+    boost_default: 1.2
+    diversity_group: "activity"
+
+  - id: "aquarium"
+    aliases: ["fish", "marine", "underwater", "ocean", "sea_life", "educational"]
+    boost_default: 1.2
+    diversity_group: "activity"
+
+  - id: "night_market"
+    aliases: ["street_food", "local_food", "shopping", "bargain", "authentic"]
+    boost_default: 1.1
+    diversity_group: "activity"
+
+  - id: "gallery"
+    aliases: ["art", "exhibition", "museum", "culture", "creative", "artistic"]
+    boost_default: 1.0
+    diversity_group: "culture"
+
+  - id: "live_music"
+    aliases: ["concert", "performance", "band", "jazz", "acoustic", "entertainment"]
+    boost_default: 1.2
+    diversity_group: "entertainment"
+
+  - id: "tasting"
+    aliases: ["wine", "whiskey", "cocktail", "craft_beer", "degustation", "sampling"]
+    boost_default: 1.1
+    diversity_group: "food_drink"
+
+  - id: "spa"
+    aliases: ["wellness", "massage", "relaxation", "therapy", "beauty", "pampering"]
+    boost_default: 1.0
+    diversity_group: "wellness"
+
+  - id: "onsen"
+    aliases: ["hot_spring", "thermal", "bath", "relaxation", "japanese", "traditional"]
+    boost_default: 1.1
+    diversity_group: "wellness"
+
+  - id: "park_stroll"
+    aliases: ["walk", "nature", "green", "outdoor", "peaceful", "exercise"]
+    boost_default: 1.0
+    diversity_group: "activity"
+
+  - id: "cinema_indie"
+    aliases: ["indie_cinema", "art_house", "film_festival"]
+    boost_default: 1.0
+    diversity_group: "entertainment"
+
+  - id: "boat_cruise"
+    aliases: ["river_cruise", "chao_phraya", "sunset_cruise", "boat_dinner"]
+    boost_default: 1.1
+    diversity_group: "activity"
+
+# --------------------------------
+# МОДИФИКАТОРЫ ЕДЫ/НАПИТКОВ (tags)
+# --------------------------------
+food_drink_modifiers:
+  - id: "tom_yum"
+    aliases: ["thai_soup", "spicy_soup", "lemongrass", "galangal", "thai_herbs"]
+    boost_default: 1.2
+    diversity_group: "cuisine"
+
+  - id: "izakaya"
+    aliases: ["japanese_pub", "sake", "japanese_food", "casual_dining", "japanese_drinks"]
+    boost_default: 1.1
+    diversity_group: "cuisine"
+
+  - id: "natural_wine"
+    aliases: ["organic_wine", "biodynamic", "artisanal", "small_producer", "wine_bar", "pet_nat", "orange_wine"]
+    boost_default: 1.3
+    diversity_group: "drink_type"
+
+  - id: "specialty_coffee"
+    aliases: ["third_wave", "artisan_coffee", "single_origin", "pour_over", "coffee_shop", "roastery", "filter"]
+    boost_default: 1.2
+    diversity_group: "drink_type"
+
+  - id: "craft_beer"
+    aliases: ["microbrew", "local_brewery", "artisanal_beer", "ipa", "stout", "ale"]
+    boost_default: 1.1
+    diversity_group: "drink_type"
+
+  - id: "omakase"
+    aliases: ["chef_choice", "japanese_fine_dining", "sushi", "sashimi", "high_end"]
+    boost_default: 1.4
+    diversity_group: "dining_style"
+
+# -----------------------
+# ПАРАМЕТРЫ ПАРСИНГА
+# -----------------------
+parsing:
+  confidence_thresholds:
+    vague_queries: 0.4       # "что-то интересное", "удиви"
+    structured_queries: 0.7  # "tom yum, spa, rooftop Thonglor"
+  fallback_llm: true          # форсировать LLM, если ничего не найдено
+  cache:
+    ttl_minutes: 15
+    max_entries: 1000
+
+# -----------------------
+# ПАРАМЕТРЫ РАНЖИРОВАНИЯ
+# -----------------------
+ranking:
+  base_weights:
+    search_score: 1.0
+    vibe_score: 0.6
+    novelty: 0.4
+  proximity:
+    enabled: true
+    anchor_bonus: 0.3
+    user_bonus: 0.2
+  diversity:
+    enabled: true
+    top_k: 12
+    similarity_threshold: 0.3
+
+# -----------------------
+# СЕССИИ/ПРОФИЛИ
+# -----------------------
+profiles:
+  session_ttl_hours: 24
+  max_signals: 100
+  novelty_decay: 0.9
+
+# -----------------------
+# ОРТОГОНАЛЬНЫЕ ОСИ
+# -----------------------
+timeslots:
+  - id: "morning"     # 06:00–11:00
+    aliases: ["breakfast", "early", "am"]
+  - id: "daytime"     # 11:00–17:00
+    aliases: ["lunch", "afternoon"]
+  - id: "evening"     # 17:00–22:00
+    aliases: ["dinner", "sunset"]
+  - id: "late_night"  # 22:00–04:00
+    aliases: ["night", "afterparty", "open_late"]
+
+energy_levels:
+  - id: "low"
+    aliases: ["low_key", "relaxed", "calm"]
+  - id: "medium"
+    aliases: ["balanced", "social"]
+  - id: "high"
+    aliases: ["party", "upbeat", "energetic"]
+
+noise_levels:
+  - id: "quiet"
+    aliases: ["hushed", "library_like"]
+  - id: "moderate"
+    aliases: ["background_music"]
+  - id: "loud"
+    aliases: ["boisterous", "crowded", "dj"]
+
+lighting:
+  - id: "bright"
+    aliases: ["daylight", "sunlit"]
+  - id: "dim"
+    aliases: ["low_light", "candlelight", "mood_lighting"]
+
+seating:
+  - id: "outdoor"
+    aliases: ["terrace", "garden", "patio", "rooftop_seating"]
+  - id: "indoor"
+    aliases: ["ac", "salon"]
+  - id: "counter"
+    aliases: ["bar_counter", "chef_counter"]
+  - id: "private_room"
+    aliases: ["vip_room", "private_dining"]
+
+views:
+  - id: "skyline"
+    aliases: ["city_view", "panoramic", "rooftop_view"]
+  - id: "riverside"
+    aliases: ["river_view", "pier"]
+  - id: "green"
+    aliases: ["park_view", "garden_view"]
+
+price_tiers:
+  - id: "$"
+    aliases: ["cheap", "budget", "student"]
+  - id: "$$"
+    aliases: ["mid", "affordable"]
+  - id: "$$$"
+    aliases: ["premium", "upscale"]
+  - id: "$$$$"
+    aliases: ["luxury", "high_end", "fine_dining"]
+
+operational_flags:
+  - id: "reservation_required"
+
+# -----------------------
+# VIBE PACKS (для mode=vibe)
+# -----------------------
+vibe_packs:
+  chill:
+    must_any: [vibe:chill, spa, onsen, tea_room, park_stroll, specialty_coffee, quiet]
+    prefer: [noise:quiet, lighting:dim, seating:outdoor, view:green, dateworthy]
+    avoid: [club, edm, loud, party, nightlife]
+    curveball: [museum, gallery, planetarium, float_tank, sound_healing]
+  
+  romantic:
+    must_any: [vibe:romantic, date, first_date, rooftop, skyline, wine_bar, candlelit]
+    prefer: [lighting:dim, seating:private_room, view:skyline, dateworthy, vista_view]
+    avoid: [loud, kids_friendly, family, casual]
+    curveball: [gallery, rooftop_cinema, river_cruise_dinner, secret_supper_club]
+  
+  active:
+    must_any: [climbing, trampoline, karting, bowling, billiards, vr_experience, muay_thai_class]
+    prefer: [vibe:lively, friends, group, energetic]
+    avoid: [spa, tea_room, quiet, romantic, date]
+    curveball: [wakepark, indoor_surf_flowrider, skatepark_session, escape_room]
+  
+  artsy:
+    must_any: [gallery, art_space, workshop, pottery_class, indie_cinema, photography_walk]
+    prefer: [vibe:artsy, creative, cultural, local_gem]
+    avoid: [party, loud, family, kids_friendly]
+    curveball: [creative_market_fair, tea_ceremony, perfume_lab, art_exhibit]
+  
+  classy:
+    must_any: [vibe:premium, fine_dining, omakase, chef_table, wine_bar, rooftop, $$$$]
+    prefer: [hq_experience, editor_pick, dateworthy, vista_view, sophisticated]
+    avoid: [casual, loud, kids_friendly, budget]
+    curveball: [mystery_dining, secret_supper_club, wine_tasting, private_dining]
+  
+  scenic:
+    must_any: [rooftop, skyline, riverside, green, view, sunset_spots, panoramic]
+    prefer: [vista_view, dateworthy, lighting:dim, seating:outdoor]
+    avoid: [indoor, loud, kids_friendly]
+    curveball: [skyline_viewpoint_hop, sunset_photo_spots_tour, river_cruise, observation_deck]
+  
+  nightlife:
+    must_any: [live_music, cocktail_bar, natural_wine, edm_club, hip_hop_party, speakeasy_hunt]
+    prefer: [vibe:lively, party, late_night, trend_score]
+    avoid: [quiet, family, kids_friendly, early_morning]
+    curveball: [warehouse_rave, open_mic_poetry, standup_comedy_show, underground_party]
+  
+  family:
+    must_any: [aquarium, planetarium, science_museum, trampoline_park, indoor_playground, theme_park]
+    prefer: [kid_friendly, family, accessibility_ok, pet_friendly]
+    avoid: [adult_only, loud, late_night, romantic]
+    curveball: [mini_golf_course, ice_skating, water_park, family_workshop]
+  
+  trendy:
+    must_any: [vibe:trendy, instagrammable, hip, modern, contemporary, fashionable]
+    prefer: [trend_score, social, friends, aesthetic]
+    avoid: [quiet, traditional, old_fashioned]
+    curveball: [pop_up_event, limited_edition, exclusive_access, influencer_spot]
+  
+  cozy:
+    must_any: [vibe:cozy, specialty_coffee, patisserie, tea_room, bookshop_cafe, quiet]
+    prefer: [noise:quiet, lighting:dim, seating:indoor, warm]
+    avoid: [loud, party, outdoor, cold]
+    curveball: [gallery, zine_shop, reading_nook, quiet_workspace]
+
+# -----------------------
+# ENERGY MAP (для energy параметра)
+# -----------------------
+energy_map:
+  low:
+    noise_max: 0.35
+    description: "Тихие, спокойные места"
+  medium:
+    noise_max: 0.60
+    description: "Умеренная активность, социальная атмосфера"
+  high:
+    noise_max: 0.85
+    description: "Энергичные, шумные места"
+
+# -----------------------
+# TAG HINTS → ваши теги
+# -----------------------
+tag_hints:
+  reservation_required: [reservation, booking, table_only]
+  outdoor: [terrace, patio, balcony, open_air]
+  quiet: [library_like, study_friendly, remote_work]
+  late_night: [open_till_2am, after_midnight, night_owl]
+  skyline: [view, sunset, panoramic, city_lights]

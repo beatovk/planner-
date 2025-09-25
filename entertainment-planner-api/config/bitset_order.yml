@@ -1,0 +1,43 @@
+version: 1
+# Жёсткий порядок тегов (snake_case), используемых в bitset (макс 64)
+order:
+  - category:cafe
+  - category:restaurant
+  - category:bar
+  - category:spa
+  - category:park
+  - experience:rooftop
+  - experience:live_music
+  - experience:night_market
+  - experience:gallery
+  - experience:spa
+  - experience:onsen
+  - experience:park_stroll
+  - cuisine:thai
+  - cuisine:japanese
+  - cuisine:italian
+  - drink:craft_beer
+  - drink:specialty_coffee
+  - drink:cocktail_bar
+  - vibe:chill
+  - vibe:romantic
+  - vibe:lively
+  - vibe:cozy
+  - vibe:trendy
+  - vibe:scenic
+  - scenario:date
+  - scenario:first_date
+  - scenario:friends
+  - scenario:family
+  - feature:outdoor
+  - feature:indoor
+  - feature:late_night
+  - view:skyline
+  - view:riverside
+  - view:green
+  - diet:vegan
+  - diet:vegetarian
+  - price:$
+  - price:$$
+  - price:$$$
+  - price:$$$$

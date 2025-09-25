@@ -1,0 +1,226 @@
+---
+globs:
+alwaysApply: true 
+description: This document provides a practical set of guidelines for building a clean, testable, and evolvable MVP using FastAPI.  
+It focuses on data ingestion, GPT-assisted normalization, full-text search, and short route recommendations.  
+The rules favor clarity and guardrails without imposing rigid constraints that would hinder future changes (e.g., switching databases, adding services, or scaling the architecture).
+
+---
+
+# 1. Code Organization and Structure
+
+## 1.1. Directory Structure (Suggested)
+
+entertainment/
+  apps/
+    api/
+      main.py              # FastAPI app entrypoint
+      routes/
+        __init__.py
+        health.py          # health check
+        places.py          # search, detail
+        recommend.py       # route recommendations
+      schemas/             # Pydantic schemas
+      dependencies.py
+    core/
+      db.py                # DB session + SQLite engine
+      config.py            # env vars loader
+      logging.py
+    places/
+      models.py            # SQLAlchemy Place model
+      services/
+        search.py          # FTS5 ranking helpers
+        route.py           # distance & route builder
+        normalize.py       # GPT-based summarization
+        cache.py           # optional (in-memory/Redis later)
+      ingestion/
+        timeout_adapter.py # scraping/parsing (no FastAPI deps)
+      commands/
+        ingest_timeout.py
+        summarize_places.py
+        rebuild_fts.py
+  requirements.txt
+  requirements-dev.txt
+  pyproject.toml
+  alembic.ini              # migrations
+  .env.example
+  .github/workflows/ci.yml
+
+Views (routes) stay thin, business logic lives in services/, ingestion adapters are isolated.
+
+---
+
+# 2. Data Model and Processing
+
+## 2.1. Single Table Strategy (MVP)
+
+Use one table `places` as the source of truth. Store raw and clean fields side-by-side.
+
+**Core fields (minimum):**
+- Raw: `raw_payload` (TEXT JSON), `source`, `source_url`, `scraped_at`.
+- Clean: `name`, `category`, `tags_csv`, `description`, `summary`, `lat`, `lng`, `price_level`, `hours_json`.
+- Process: `processing_status` (new | summarized | published | error), `last_error`, `updated_at`, `published_at`.
+
+Keep raw_payload intact for auditability.
+
+## 2.2. Status Flow
+
+- **new** → inserted by ingestion.
+- **summarized** → normalized by GPT (clean fields populated).
+- **published** → visible to API consumers.
+- **error** → failed, `last_error` recorded.
+
+Rule: public API returns only published entries.
+
+## 2.3. Full-Text Search (MVP)
+
+SQLite: create FTS5 virtual table `fts_places` with external content bound to `places`.
+
+Ranking: bm25 with light weighting (name > tags > summary > category > description).
+
+Later: switch to Postgres pg_trgm/pgvector, keeping `services/search.py` API stable.
+
+---
+
+# 3. Ingestion and GPT Normalization
+
+## 3.1. Ingestion
+
+`commands/ingest_timeout.py`:  
+- Fetch raw items from TimeOut Bangkok.  
+- Insert `Place` rows with status=`new`.  
+- Avoid duplicates via `source_url` or hash.
+
+## 3.2. GPT Normalization
+
+`commands/summarize_places.py`:  
+- Select `new` rows in batch.  
+- Call GPT (e.g., 4o-mini) with strict JSON output.  
+- Populate clean fields: `name`, `tags_csv`, `summary`, etc.  
+- Update status → `summarized`.  
+- Optionally auto-publish for MVP.  
+
+MVP scheduler = cron/systemd; avoid Celery until needed.
+
+---
+
+# 4. API Design (FastAPI)
+
+## 4.1. Endpoints (MVP)
+
+- **GET /api/health** → service health.  
+- **GET /api/places/{id}** → place details (published only).  
+- **GET /api/places/search?q=&limit=** → FTS search; sanitize query; return ranked results.  
+- **GET /api/recommend?vibe=&intents=tom-yum,walk,rooftop&lat=&lng=&radius_m=1000**  
+  - Fetch candidates per intent.  
+  - Filter by radius.  
+  - Compute permutations (2–3 steps), Haversine distances.  
+  - Penalize “closing soon”.  
+  - Return best sequence.
+
+## 4.2. Validation and Errors
+
+- Use Pydantic schemas for input validation.  
+- Invalid queries → 400.  
+- Always return structured JSON errors.
+
+## 4.3. Serialization
+
+- Responses = explicit schemas.  
+- Expose only clean/public fields.
+
+---
+
+# 5. Common Patterns and Anti-Patterns
+
+**Use**:  
+- Service layer for logic (search, routes).  
+- Adapters for external providers.  
+- Commands for ingestion & normalization.  
+
+**Avoid**:  
+- Fat route handlers — delegate to services.  
+- Long-running tasks in HTTP.  
+- Hardcoded secrets/paths.  
+- Unsafe SQL — parametrize & sanitize.
+
+---
+
+# 6. Performance and Caching
+
+- SQLite is fine for MVP.  
+- Optionally add small cache layer (in-memory dict) with a future Redis interface.  
+- Limit radius & candidate sets to keep routing fast.
+
+---
+
+# 7. Security and Config
+
+- Use `.env` + Pydantic `BaseSettings` for config.  
+- Keep secrets out of VCS.  
+- Minimal CORS setup (explicit origins).  
+- HTTPS via reverse proxy in production.
+
+---
+
+# 8. Tooling and Quality
+
+- Lint: `ruff`.  
+- Typing: `mypy`.  
+- Tests: `pytest`.  
+- Logging: `structlog` or stdlib logging.
+
+---
+
+# 9. Deployment and Environments
+
+- **Dev**: SQLite.  
+- **Prod**: SQLite (ok for small scale) or Postgres.  
+- Run with `uvicorn` or `gunicorn+uvicorn`.  
+- Health endpoint enabled.  
+
+---
+
+# 10. Extensibility (Future)
+
+- Swap SQLite FTS for Postgres `pg_trgm`/`pgvector`.  
+- Add Celery/RQ for background tasks.  
+- Add personalization into ranking.  
+- Add new ingestion adapters (Google Maps, blogs, etc.).
+
+---
+
+# Appendix A — Minimal SQLAlchemy Model
+
+```python
+class Place(Base):
+    __tablename__ = "places"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    # raw
+    raw_payload = Column(Text)
+    source = Column(String(64))
+    source_url = Column(String, nullable=True)
+    scraped_at = Column(DateTime)
+
+    # clean
+    name = Column(String(256))
+    category = Column(String(64))
+    tags_csv = Column(Text)
+    description = Column(Text)
+    summary = Column(Text)
+    lat = Column(Float)
+    lng = Column(Float)
+    price_level = Column(Integer)
+    hours_json = Column(JSON, default={})
+
+    # process
+    processing_status = Column(String(16), default="new")
+    last_error = Column(Text, nullable=True)
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    published_at = Column(DateTime, nullable=True)
+
+globs:
+alwaysApply: true 
+---
