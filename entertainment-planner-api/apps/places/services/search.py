@@ -336,21 +336,6 @@ class SearchService:
         """
         return query.strip()
     
-    def _get_geo_bbox(self, lat: float, lng: float, radius_m: int) -> Tuple[float, float, float, float]:
-        """Calculate bounding box for geo filtering"""
-        # Earth radius in meters
-        R = 6371000.0
-        
-        # Convert radius to degrees
-        lat_delta = radius_m / R * (180 / math.pi)
-        lng_delta = radius_m / (R * math.cos(math.radians(lat))) * (180 / math.pi)
-        
-        return (
-            lat - lat_delta,  # min_lat
-            lat + lat_delta,  # max_lat
-            lng - lng_delta,  # min_lng
-            lng + lng_delta   # max_lng
-        )
     
     def _get_cache_key(self, query: str, user_lat: Optional[float], user_lng: Optional[float],
                       radius_m: Optional[int], limit: int, offset: int, area: Optional[str] = None,
@@ -627,7 +612,7 @@ class SearchService:
                 Place.lng.between(area_bounds['lng_min'], area_bounds['lng_max'])
             )
             after_count = query_obj.count()
-            print(f"DEBUG: Exact matches - before area filter: {before_count}, after: {after_count}")
+            logger.debug("Exact matches area filter: before=%d after=%d", before_count, after_count)
         
         places = query_obj.limit(10).all()
         return [self._place_to_dict(p, user_lat, user_lng) for p in places]
@@ -953,9 +938,9 @@ class SearchService:
         if not query or query.strip() == "":
             return self._get_recent_places(limit, offset, user_lat, user_lng, radius_m, sort)
         
-        # дефолт радиуса (2.5 км), если есть гео, но радиус не указан
+        # дефолт радиуса (10 км), если есть гео, но радиус не указан
         if (radius_m is None) and (user_lat is not None) and (user_lng is not None):
-            radius_m = 2500
+            radius_m = 10000
         
         # Check cache first (LRU)
         cache_key = self._get_cache_key(query, user_lat, user_lng, radius_m, limit, offset, area, sort)
@@ -963,7 +948,7 @@ class SearchService:
         if cached is not None:
             return cached
         
-        # 1) Пробуем FTS (Postgres MV)
+        # Используем только FTS (Postgres MV)
         try:
             fts = self._fts_search_pg(query, limit, offset, user_lat, user_lng, area, radius_m)
             if fts:
@@ -972,12 +957,15 @@ class SearchService:
                     fts = [p for p in fts if p.get("distance_m") is not None and p["distance_m"] <= radius_m]
                 self._cache_set(cache_key, fts)
                 return fts
+            else:
+                # Если FTS пустой, возвращаем пустой результат
+                self._cache_set(cache_key, [])
+                return []
         except Exception as e:
-            logger.warning(f"FTS search failed, falling back. Error: {e}")
-        # 2) Fallback: Netflix-style
-        results = self._netflix_style_search(query, limit, offset, user_lat, user_lng, radius_m, sort, area)
-        self._cache_set(cache_key, results)
-        return results
+            logger.error(f"FTS search failed: {e}")
+            # В случае ошибки возвращаем пустой результат
+            self._cache_set(cache_key, [])
+            return []
 
     # --- NEW: PG FTS over MV ---
     def _fts_search_pg(self, query: str, limit: int, offset: int,
@@ -1291,16 +1279,10 @@ class SearchService:
         """Поиск по drink слотам."""
         expands_to_tags = slot.filters.get('expands_to_tags', [])
         
-        query_parts = []
-        for tag in expands_to_tags:
-            if tag.startswith('drink:'):
-                query_parts.append(f'"{tag}"')
+        # Используем только текстовый поиск для drink слотов
+        query = slot.canonical
         
-        # Добавляем текстовый поиск
-        query_parts.append(f'"{slot.canonical}"')
-        
-        query = ' OR '.join(query_parts)
-        
+        # Используем FTS поиск для drink слотов
         return self.search_places(
             query=query,
             limit=limit,

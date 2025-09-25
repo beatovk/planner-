@@ -228,6 +228,11 @@ slots:
     expands_to_tags: [drink:tea_room]
 
   - type: drink
+    canonical: matcha
+    synonyms: [matcha, green tea, ceremonial matcha, matcha latte, matcha ceremony, 抹茶]
+    expands_to_tags: [drink:specialty_coffee, drink:tea_room, dish:matcha, cuisine:japanese]
+
+  - type: drink
     canonical: natural_wine
     synonyms: [natural wine, natty wine, orange wine, pet nat, minimal intervention, skin-contact, wine bar]
     expands_to_tags: [drink:natural_wine, vibe:trendy]

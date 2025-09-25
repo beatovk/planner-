@@ -4,6 +4,7 @@ Health check endpoints для мониторинга системы.
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from apps.core.db import get_db
 from apps.places.services.synonyms_validator import get_synonyms_health
 from apps.core.feature_flags import get_feature_flags, get_slotter_config
@@ -19,7 +20,7 @@ async def health_check(db: Session = Depends(get_db)):
     """Основной health check endpoint."""
     try:
         # Проверяем подключение к БД
-        db.execute("SELECT 1")
+        db.execute(text("SELECT 1"))
         
         return {
             "status": "healthy",
@@ -61,7 +62,7 @@ async def detailed_health_check(db: Session = Depends(get_db)):
     """Детальный health check с метриками всех компонентов."""
     try:
         # Проверяем БД
-        db.execute("SELECT 1")
+        db.execute(text("SELECT 1"))
         db_status = "connected"
         
         # Проверяем словарь синонимов

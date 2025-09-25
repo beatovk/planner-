@@ -162,6 +162,8 @@ class PlaceCard(BaseModel):
     novelty_score: float = 0.0
     # lightweight UX explainers
     badges: List[str] = Field(default_factory=list)
+    # signals for High Experience filtering
+    signals: Optional[Dict[str, Any]] = None
     reason: Optional[str] = None
     why: Optional[str] = None
 

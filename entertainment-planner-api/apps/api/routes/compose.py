@@ -259,6 +259,8 @@ def _annotate_card_with_signals(card: PlaceCard, row) -> PlaceCard:
     badges, why = _sig_to_badges_and_why(sig, cluster_label)
     card.badges = badges
     card.why = why
+    # Сохраняем signals в карточку
+    card.signals = sig
     # we do not mutate DB here; we enrich response only
     return card
 
@@ -488,9 +490,10 @@ async def compose_rails(
             if resp:
                 try:
                     labels = [f"{r.label}:{r.origin or 'query'}" for r in (cached.rails or [])]
-                    resp.headers["X-Mode"] = request.mode or "light"
-                    resp.headers["X-Rails"] = "; ".join(labels)
-                    resp.headers["X-Rails-Cache"] = "HIT"
+                    if resp:
+                        resp.headers["X-Mode"] = request.mode or "light"
+                        resp.headers["X-Rails"] = "; ".join(labels)
+                        resp.headers["X-Rails-Cache"] = "HIT"
                 except Exception:
                     pass
             return cached
@@ -561,13 +564,13 @@ async def compose_rails(
             if not seeds:
                 return []
 
-            # Собираем паттерны ILIKE для MV
-            like_list = ",".join(["'%" + x.replace("'", "''") + "%'" for x in seeds])
-            # Строим ILIKE условия безопасно
+            # Строим ILIKE условия безопасно через параметры
             ilike_conditions = []
-            for x in seeds:
-                safe_x = x.replace("'", "''")
-                ilike_conditions.append(f"tags_csv ILIKE '%{safe_x}%'")
+            params = {}
+            for i, x in enumerate(seeds):
+                key = f"pat_{i}"
+                ilike_conditions.append(f"tags_csv ILIKE :{key}")
+                params[key] = f"%{x}%"
             
             sql = text(f"""
                 WITH hits AS (
@@ -587,7 +590,7 @@ async def compose_rails(
                 ORDER BY cnt DESC
                 LIMIT 50
             """)
-            rows = db.execute(sql).fetchall()
+            rows = db.execute(sql, params).fetchall()
 
             # Try to use SLOT_COMPLEMENTS first
             try:
@@ -805,9 +808,10 @@ async def compose_rails(
         if resp:
             try:
                 labels = [f"{r.label}:{r.origin or 'query'}" for r in (payload.rails or [])]
-                resp.headers["X-Mode"] = request.mode or "light"
-                resp.headers["X-Rails"] = "; ".join(labels)
-                resp.headers["X-Rails-Cache"] = "MISS"
+                if resp:
+                    resp.headers["X-Mode"] = request.mode or "light"
+                    resp.headers["X-Rails"] = "; ".join(labels)
+                    resp.headers["X-Rails-Cache"] = "MISS"
             except Exception:
                 pass
 
@@ -1153,11 +1157,16 @@ async def get_rails(
         cache_key = _vibe_rails_cache_key(vibe, energy, area, user_lat, user_lng, quality_only)
         cached_result = _rcache_get(cache_key)
         if cached_result:
-            resp.headers["X-Cache"] = "HIT"
+            if resp:
+                resp.headers["X-Cache"] = "HIT"
             return cached_result
         
         # Generate new result
         result = await _compose_vibe_rails(vibe, energy, area, user_lat, user_lng, quality_only, db)
+        _rcache_set(cache_key, result)
+        if resp:
+            resp.headers["X-Cache"] = "MISS"
+        return result
     
     # Free-text query mode (slotter)
     elif q and q.strip():
@@ -1180,7 +1189,8 @@ async def get_rails(
         cache_key = _slotter_rails_cache_key(q, area, user_lat, user_lng, quality_only)
         cached_result = _rcache_get(cache_key)
         if cached_result:
-            resp.headers["X-Cache"] = "HIT"
+            if resp:
+                resp.headers["X-Cache"] = "HIT"
             if should_log_slotter(q):
                 logger.info(f"Shadow mode: Cache hit for query '{q}'")
             return cached_result
@@ -1196,7 +1206,8 @@ async def get_rails(
         
         # Cache the result
         _rcache_set(cache_key, result)
-        resp.headers["X-Cache"] = "MISS"
+        if resp:
+            resp.headers["X-Cache"] = "MISS"
         return result
     
     # default suggested rails (light/vibe mode)
@@ -1607,6 +1618,7 @@ async def _compose_slotter_rails(q: str, area: Optional[str],
                         rating=place.get("rating"),
                         distance_m=place.get("distance_m"),
                         search_score=place.get("search_score", 0.0),
+                        signals=place.get("signals"),
                         reason=f"Matched {slot.type}:{slot.canonical}"
                     )
                     items.append(card)
@@ -1707,6 +1719,7 @@ async def _compose_slotter_rails(q: str, area: Optional[str],
                         rating=place.get("rating"),
                         distance_m=place.get("distance_m"),
                         search_score=place.get("search_score", 0.0),
+                        signals=place.get("signals"),
                         reason="Editorial pick"
                     )
                     items.append(card)
