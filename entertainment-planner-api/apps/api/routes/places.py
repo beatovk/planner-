@@ -1,5 +1,8 @@
+import logging
 import time
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
+
+logger = logging.getLogger(__name__)
 from sqlalchemy.orm import Session
 from apps.core.db import get_db
 from apps.places.models import Place
@@ -89,11 +92,9 @@ async def search_places(
             has_more=has_more
         )
     
-    except Exception as e:
+    except Exception:
         # Log error and return empty results
-        import traceback
-        print(f"Search error: {e}")
-        print(f"Traceback: {traceback.format_exc()}")
+        logger.exception("Search error")
         return SearchResponse(
             results=[],
             total_count=0,

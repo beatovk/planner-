@@ -28,6 +28,10 @@ class Settings(BaseSettings):
     # Environment
     environment: str = "development"
     
+    # Search / config cache
+    search_default_radius_m: int = 10_000
+    config_cache_ttl_s: int = 300
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

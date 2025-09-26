@@ -652,7 +652,6 @@ function renderRails(){
         
         // Показываем компактный рейтинг если есть
         ratingEl.style.display = "flex";
-        console.log('Rating raw', place.name, place.rating, typeof place.rating);
         let ratingText = place.rating;
         if (ratingText === undefined || ratingText === null || ratingText === "") {
           ratingText = "—";
@@ -685,9 +684,6 @@ function renderRails(){
           });
 
         // Показываем расстояние согласно новой логике
-        console.log(`Rendering place: ${place.name}`);
-        console.log(`Place coordinates:`, { lat: place.lat, lng: place.lng });
-        console.log(`Step distance label:`, st.distanceLabel);
         
         // Нет координат у карточки → показать —
         if (!place.lat || !place.lng) {
@@ -704,7 +700,6 @@ function renderRails(){
         // Используем предвычисленное расстояние из place.distance
         if (place.distance !== undefined && st.distanceLabel) {
           const finalText = `${formatDistance(place.distance)} ${st.distanceLabel}`;
-          console.log(`Final distance text:`, finalText);
           distEl.textContent = finalText;
         } else {
           // Fallback: показываем что-то вместо "—"

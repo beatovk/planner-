@@ -1,4 +1,7 @@
+import logging
 from fastapi import FastAPI
+
+logger = logging.getLogger(__name__)
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import asyncio
@@ -47,8 +50,8 @@ async def schedule_mv_refresh():
             try:
                 with engine.connect() as c:
                     c.execute(text("SELECT epx.refresh_places_search_mv();"))
-            except Exception as e:
-                print(f"[MV refresh] error: {e}")
+            except Exception:
+                logger.exception("[MV refresh] error")
             await asyncio.sleep(300)  # 5 min
     asyncio.create_task(worker())
 
