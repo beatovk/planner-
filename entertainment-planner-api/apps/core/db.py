@@ -59,10 +59,6 @@ engine = create_engine(
     max_overflow=10,
     pool_timeout=30,
     pool_recycle=1800,    # раз в 30 мин обновлять соединения
-    connect_args={
-        # аккуратные защитные таймауты на стороне сервера
-        "options": "-c statement_timeout=8000 -c idle_in_transaction_session_timeout=10000"
-    },
 )
 
 # Create SessionLocal class
