@@ -31,7 +31,6 @@ async def apply_epx_schema(db: Session = Depends(get_db)):
                 lat,
                 lng,
                 picture_url,
-                rating,
                 processing_status,
                 signals,
                 search_vector,
