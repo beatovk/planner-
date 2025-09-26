@@ -1039,11 +1039,11 @@ class SearchService:
             params.update({'lat_min': lat_min, 'lat_max': lat_max, 'lng_min': lng_min, 'lng_max': lng_max})
         sql = text(f"""
             SELECT id, name, category, summary, tags_csv, lat, lng,
-                   picture_url, gmaps_place_id, gmaps_url, rating, processing_status,
+                   picture_url, processing_status,
                    ts_rank(search_vector, websearch_to_tsquery('simple', :tsq)) AS rank,
                    signals
             FROM epx.places_search_mv
-            WHERE processing_status IN ('summarized','published')
+            WHERE processing_status IN ('published')
               AND search_vector @@ websearch_to_tsquery('simple', :tsq)
               {where_area}
               {where_bbox}
@@ -1065,7 +1065,6 @@ class SearchService:
             out.append({
                 "id": r.id, "name": r.name, "summary": r.summary or "", "tags_csv": r.tags_csv or "",
                 "category": r.category or "", "lat": r.lat, "lng": r.lng, "picture_url": r.picture_url,
-                "gmaps_place_id": r.gmaps_place_id, "gmaps_url": r.gmaps_url, "rating": r.rating, 
                 "processing_status": r.processing_status,
                 "search_score": float(getattr(r, "rank", 0.0)) * 1000.0,  # нормируем в шкалу 0..1000
                 "rank": float(getattr(r, "rank", 0.0)),  # для схемы SearchResult
@@ -1081,7 +1080,7 @@ class SearchService:
         sql = text("""
             SELECT DISTINCT ON (name) name, tags_csv
             FROM epx.places_search_mv
-            WHERE processing_status IN ('summarized','published')
+            WHERE processing_status IN ('published')
               AND search_vector @@ websearch_to_tsquery('simple', :tsq)
             ORDER BY name ASC
             LIMIT :limit
@@ -1109,7 +1108,7 @@ class SearchService:
         sql = text("""
             SELECT COUNT(*) AS count
             FROM epx.places_search_mv
-            WHERE processing_status IN ('summarized','published')
+            WHERE processing_status IN ('published')
               AND search_vector @@ websearch_to_tsquery('simple', :tsq)
         """)
         return int(self.db.execute(sql, {'tsq': tsq}).scalar() or 0)
