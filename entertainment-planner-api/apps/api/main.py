@@ -43,17 +43,17 @@ app.mount("/", StaticFiles(directory="apps/web-mobile", html=True), name="mobile
 # Mount static files for web2 app
 app.mount("/web2", StaticFiles(directory="apps/web-mobile/web2", html=True), name="web2")
 
-@app.on_event("startup")
-async def schedule_mv_refresh():
-    async def worker():
-        while True:
-            try:
-                with engine.connect() as c:
-                    c.execute(text("SELECT epx.refresh_places_search_mv();"))
-            except Exception:
-                logger.exception("[MV refresh] error")
-            await asyncio.sleep(300)  # 5 min
-    asyncio.create_task(worker())
+# @app.on_event("startup")
+# async def schedule_mv_refresh():
+#     async def worker():
+#         while True:
+#             try:
+#                 with engine.connect() as c:
+#                     c.execute(text("SELECT epx.refresh_places_search_mv();"))
+#             except Exception:
+#                 logger.exception("[MV refresh] error")
+#             await asyncio.sleep(300)  # 5 min
+#     asyncio.create_task(worker())
 
 @app.get("/")
 async def root():
