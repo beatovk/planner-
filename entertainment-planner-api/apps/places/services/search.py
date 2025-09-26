@@ -602,16 +602,16 @@ class SearchService:
                 "u_lng_min": min_lng, "u_lng_max": max_lng,
             })
 
-        # Поиск по материализованному представлению с tsvector
+        # Поиск по places_search таблице с tsvector
         sql = text(f"""
             SELECT 
-                m.id, m.name, m.category, m.summary, m.tags_csv,
-                m.lat, m.lng, m.picture_url, m.gmaps_place_id, m.gmaps_url, m.rating,
-                m.processing_status,
-                ts_rank(m.search_vector, websearch_to_tsquery('simple', :q)) AS rank_score
-            FROM epx.places_search_mv m
-            WHERE m.processing_status IN ('published','summarized','new')
-              AND m.search_vector @@ websearch_to_tsquery('simple', :q)
+                p.id, p.name, p.category, p.summary, p.tags_csv,
+                p.lat, p.lng, p.picture_url, NULL as gmaps_place_id, NULL as gmaps_url, NULL as rating,
+                p.processing_status,
+                ts_rank(p.search_vector, websearch_to_tsquery('simple', :q)) AS rank_score
+            FROM places_search p
+            WHERE p.processing_status IN ('published','summarized','new')
+              AND p.search_vector @@ websearch_to_tsquery('simple', :q)
               {area_sql}
             ORDER BY rank_score DESC
             LIMIT :limit OFFSET :offset
@@ -935,10 +935,10 @@ class SearchService:
             
         sql = text(f"""
             SELECT id, name, category, summary, tags_csv, lat, lng,
-                   picture_url, gmaps_place_id, gmaps_url, rating, processing_status,
+                   picture_url, NULL as gmaps_place_id, NULL as gmaps_url, NULL as rating, processing_status,
                    ts_rank(search_vector, websearch_to_tsquery('simple', :tsq)) AS rank,
                    signals
-            FROM epx.places_search_mv
+            FROM places_search
             WHERE processing_status IN ('summarized','published')
               AND search_vector @@ websearch_to_tsquery('simple', :tsq)
               {where_categories}
@@ -1039,11 +1039,11 @@ class SearchService:
             params.update({'lat_min': lat_min, 'lat_max': lat_max, 'lng_min': lng_min, 'lng_max': lng_max})
         sql = text(f"""
             SELECT id, name, category, summary, tags_csv, lat, lng,
-                   picture_url, processing_status,
+                   picture_url, NULL as gmaps_place_id, NULL as gmaps_url, NULL as rating, processing_status,
                    ts_rank(search_vector, websearch_to_tsquery('simple', :tsq)) AS rank,
                    signals
-            FROM epx.places_search_mv
-            WHERE processing_status IN ('published')
+            FROM places_search
+            WHERE processing_status IN ('summarized','published')
               AND search_vector @@ websearch_to_tsquery('simple', :tsq)
               {where_area}
               {where_bbox}
@@ -1065,6 +1065,7 @@ class SearchService:
             out.append({
                 "id": r.id, "name": r.name, "summary": r.summary or "", "tags_csv": r.tags_csv or "",
                 "category": r.category or "", "lat": r.lat, "lng": r.lng, "picture_url": r.picture_url,
+                "gmaps_place_id": r.gmaps_place_id, "gmaps_url": r.gmaps_url, "rating": r.rating, 
                 "processing_status": r.processing_status,
                 "search_score": float(getattr(r, "rank", 0.0)) * 1000.0,  # нормируем в шкалу 0..1000
                 "rank": float(getattr(r, "rank", 0.0)),  # для схемы SearchResult
@@ -1079,8 +1080,8 @@ class SearchService:
         # websearch_to_tsquery даёт хороший UX для свободного текста
         sql = text("""
             SELECT DISTINCT ON (name) name, tags_csv
-            FROM epx.places_search_mv
-            WHERE processing_status IN ('published')
+            FROM places_search
+            WHERE processing_status IN ('summarized','published')
               AND search_vector @@ websearch_to_tsquery('simple', :tsq)
             ORDER BY name ASC
             LIMIT :limit
@@ -1107,8 +1108,8 @@ class SearchService:
         tsq = self._build_tsquery(query)
         sql = text("""
             SELECT COUNT(*) AS count
-            FROM epx.places_search_mv
-            WHERE processing_status IN ('published')
+            FROM places_search
+            WHERE processing_status IN ('summarized','published')
               AND search_vector @@ websearch_to_tsquery('simple', :tsq)
         """)
         return int(self.db.execute(sql, {'tsq': tsq}).scalar() or 0)
