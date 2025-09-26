@@ -18,7 +18,7 @@ slots:
 
   - type: vibe
     canonical: romantic
-    synonyms: [romantic, date night, candlelit, intimate, couple friendly, couples]
+    synonyms: [romantic, romance, date, date night, dating, anniversary, candlelit, intimate, couple friendly, couples, date spot]
     expands_to_tags: [vibe:romantic, scenario:date]
 
   - type: vibe
@@ -147,17 +147,17 @@ slots:
   - type: experience
     canonical: karting
     synonyms: [karting, go kart, go-kart]
-    expands_to_tags: [experience:live_music]  # map to existing experience
+    expands_to_tags: [experience:karting, experience:live_music]
 
   - type: experience
     canonical: climbing
-    synonyms: [climbing gym, bouldering gym, rock climbing]
-    expands_to_tags: [experience:live_music]  # map to existing experience
+    synonyms: [climb, climbing, climbing gym, bouldering gym, rock climbing]
+    expands_to_tags: [experience:climbing]
 
   - type: experience
     canonical: trampoline
     synonyms: [trampoline park, free jump, bounce park]
-    expands_to_tags: [experience:live_music]  # map to existing experience
+    expands_to_tags: [experience:trampoline, experience:live_music]
 
   - type: experience
     canonical: ice_skating
@@ -202,17 +202,22 @@ slots:
   - type: experience
     canonical: muay_thai_class
     synonyms: [muay thai class, thai boxing class]
-    expands_to_tags: [experience:live_music]  # map to existing experience
+    expands_to_tags: [experience:muay_thai_gym, experience:live_music]
 
   - type: experience
     canonical: escape_room
     synonyms: [escape room, puzzle room]
-    expands_to_tags: [experience:live_music]  # map to existing experience
+    expands_to_tags: [experience:escape_room, experience:live_music]
 
   - type: experience
     canonical: board_games
     synonyms: [board game cafe, board games]
-    expands_to_tags: [experience:live_music]  # map to existing experience
+    expands_to_tags: [experience:board_games, experience:live_music]
+
+  - type: experience
+    canonical: cinema
+    synonyms: [cinema, movie theater, movie theatre, theater, theatre, movies]
+    expands_to_tags: [experience:cinema_indie, category:cinema]
 
   # -------------------------
   # DRINKS / BAR MODES

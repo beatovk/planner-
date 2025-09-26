@@ -42,7 +42,13 @@ class QueryBuilder:
             "restaurant": ["resto", "dining"],
             "bar": ["pub", "lounge"],
             "thai": ["thailand", "thailandese"],
-            "bangkok": ["bkk", "krung thep"]
+            "bangkok": ["bkk", "krung thep"],
+            "climb": ["climbing", "climbing gym", "bouldering"],
+            "cinema": ["movie", "movies", "movie theater", "movie theatre", "theater", "theatre"],
+            "pasta": ["tagliatelle", "spaghetti", "rigatoni"],
+            "date": ["date night", "romantic", "anniversary"],
+            "dating": ["date night", "romantic"],
+            "romantic": ["date night", "date"],
         }
         self.synonyms = base_syn
         try:
@@ -330,11 +336,59 @@ class SearchService:
         return entry["value"]
     
     def _build_tsquery(self, query: str) -> str:
-        """
-        Build Postgres websearch_to_tsquery string from raw user query.
-        Проста и надёжна для автодополнения/счёта.
-        """
-        return query.strip()
+        """Build enriched tsquery string with synonym/morph expansions for FTS."""
+        raw = (query or "").strip()
+        if not raw:
+            return ""
+
+        tokens = self.query_builder.normalize_tokens(raw)
+        if not tokens:
+            return raw
+
+        groups: List[List[str]] = []
+        seen_variants: set[str] = set()
+
+        for token in tokens:
+            variants: List[str] = []
+
+            def _add_variant(text: str) -> None:
+                cleaned = (text or "").strip().lower()
+                if not cleaned:
+                    return
+                if cleaned in seen_variants:
+                    return
+                seen_variants.add(cleaned)
+                variants.append(cleaned)
+
+            _add_variant(token)
+
+            entry = self.query_builder.synonyms.get(token)
+            if entry:
+                _add_variant(entry.canonical.replace("_", " "))
+                for syn in entry.synonyms:
+                    _add_variant(syn)
+
+            groups.append(variants or [token])
+
+        parts: List[str] = []
+        for variants in groups:
+            if not variants:
+                continue
+            # websearch_to_tsquery treats OR, AND; wrap multi-variant group in parentheses
+            sanitized = [v.replace('"', ' ') for v in variants]
+            if len(sanitized) == 1:
+                parts.append(sanitized[0])
+            else:
+                parts.append("(" + " OR ".join(sanitized) + ")")
+
+        ts_query = " ".join(parts).strip()
+        if not ts_query:
+            ts_query = raw
+
+        if ts_query != raw:
+            logger.debug("FTS tsquery expanded '%s' -> '%s'", raw, ts_query)
+
+        return ts_query
     
     
     def _get_cache_key(self, query: str, user_lat: Optional[float], user_lng: Optional[float],

@@ -155,6 +155,7 @@ class PlaceCard(BaseModel):
     website: Optional[str] = None
     phone: Optional[str] = None
     price_level: Optional[int] = None
+    rating: Optional[float] = None
     distance_m: Optional[int] = None
     walk_time_min: Optional[int] = None
     search_score: float = 0.0

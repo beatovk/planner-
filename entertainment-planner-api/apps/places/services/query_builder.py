@@ -292,6 +292,13 @@ class QueryBuilder:
     
     def _apply_fallback_strategies(self, query: str, existing_slots: List[Slot]) -> List[Slot]:
         """Применяет fallback стратегии для добавления слотов."""
+        high_conf_slots = [slot for slot in existing_slots if slot.confidence >= 0.8]
+        if high_conf_slots:
+            token_count = len(self._tokenize_query(query))
+            # Не подмешиваем общий fallback, если пользователь явно сформулировал один или два уверенных интента
+            if token_count <= 5:
+                return []
+
         fallback_slots = []
         
         for strategy in self.config.fallback_strategies:
@@ -316,8 +323,18 @@ class QueryBuilder:
     def _create_editorial_fallback_slot(self, query: str) -> Optional[Slot]:
         """Создает fallback слот на основе editorial signals."""
         query_lower = query.lower()
-        
+
         # Анализируем ключевые слова для определения типа опыта
+        if any(word in query_lower for word in ['date', 'dating', 'romantic', 'anniversary', 'proposal']):
+            return create_slot(
+                type=SlotType.VIBE,
+                canonical="romantic",
+                label="Romantic",
+                confidence=0.3,
+                filters={'expands_to_tags': ['vibe:romantic', 'scenario:date']},
+                matched_text=query,
+                reason="fallback:editorial_romantic"
+            )
         if any(word in query_lower for word in ['food', 'eat', 'restaurant', 'dinner', 'lunch']):
             return create_slot(
                 type=SlotType.CUISINE,
@@ -393,6 +410,16 @@ class QueryBuilder:
                 filters={'expands_to_tags': ['experience:gallery']},
                 matched_text=query,
                 reason="fallback:co-occurrence_art"
+            )
+        elif any(word in query_lower for word in ['date', 'dating', 'romantic', 'anniversary', 'proposal']):
+            return create_slot(
+                type=SlotType.VIBE,
+                canonical="romantic",
+                label="Romantic Vibe",
+                confidence=0.3,
+                filters={'expands_to_tags': ['vibe:romantic', 'scenario:date']},
+                matched_text=query,
+                reason="fallback:co-occurrence_romantic"
             )
         elif any(word in query_lower for word in ['music', 'live', 'band', 'concert']):
             return create_slot(

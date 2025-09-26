@@ -112,3 +112,112 @@ def test_rails_light_and_surprise_and_quality_cache():
     hq_counts = [len(r.get("items", [])) for r in rs_hq.json().get("rails", [])]
     if base_counts and hq_counts:
         assert sum(hq_counts) <= sum(base_counts)
+
+
+@pytest.mark.e2e
+def test_compose_free_text_falls_back_to_fts():
+    resp = client.get(
+        "/api/rails",
+        params={
+            "mode": "light",
+            "q": "i wanna chill rooftop and matcha",
+            "user_lat": 13.75,
+            "user_lng": 100.5,
+            "limit": 12,
+        },
+    )
+    _xfail_if_db_down(resp, "/api/rails free-text fallback")
+    assert resp.status_code == 200
+    data = resp.json()
+    rails = data.get("rails", [])
+    assert rails, "Expected rails for free-text query"
+    ids = {item["id"] for rail in rails for item in rail.get("items", [])}
+    assert 1385 in ids, "MTCH (Sukhumvit 23) should appear for matcha query"
+    for rail in rails:
+        rail_ids = [item["id"] for item in rail.get("items", [])]
+        assert len(rail_ids) == len(set(rail_ids)), "Duplicate places detected inside a rail"
+
+    resp2 = client.get(
+        "/api/rails",
+        params={
+            "mode": "light",
+            "q": "i wanna chill, rooftop and spa",
+            "user_lat": 13.75,
+            "user_lng": 100.5,
+            "limit": 12,
+        },
+    )
+    _xfail_if_db_down(resp2, "/api/rails free-text fallback multi-intent")
+    assert resp2.status_code == 200
+    rails2 = resp2.json().get("rails", [])
+    assert rails2, "Expected rails for multi-intent free-text query"
+    assert sum(len(r.get("items", [])) for r in rails2) > 0, "Expected items in multi-intent rails"
+    assert len(rails2) >= 3, "Expected at least three rails for multi-intent query"
+    first_steps = [r.get("step") for r in rails2[:3]]
+    assert len(set(first_steps)) == len(first_steps), "Rails should represent distinct intents"
+
+
+@pytest.mark.e2e
+def test_compose_climb_matcha_rooftop():
+    resp = client.get(
+        "/api/rails",
+        params={
+            "mode": "light",
+            "q": "i wanna climb matcha and rooftop",
+            "user_lat": 13.75,
+            "user_lng": 100.5,
+            "limit": 12,
+        },
+    )
+    _xfail_if_db_down(resp, "/api/rails climb-matcha-rooftop")
+    assert resp.status_code == 200
+    rails = resp.json().get("rails", [])
+    assert rails, "Expected rails for climb/matcha/rooftop query"
+    steps = {rail.get("step") for rail in rails}
+    expected = {"experience:climbing", "drink:matcha", "experience:rooftop"}
+    assert expected.issubset(steps)
+    total_items = sum(len(rail.get("items", [])) for rail in rails)
+    unique_items = len({item["id"] for rail in rails for item in rail.get("items", [])})
+    assert unique_items == total_items
+
+
+@pytest.mark.e2e
+def test_compose_pasta_cinema_matcha():
+    resp = client.get(
+        "/api/rails",
+        params={
+            "mode": "light",
+            "q": "i wanna eat pasta, cinema and matcha",
+            "user_lat": 13.75,
+            "user_lng": 100.5,
+            "limit": 12,
+        },
+    )
+    _xfail_if_db_down(resp, "/api/rails pasta-cinema-matcha")
+    assert resp.status_code == 200
+    rails = resp.json().get("rails", [])
+    assert rails, "Expected rails for pasta/cinema/matcha query"
+    steps = {rail.get("step") for rail in rails}
+    expected = {"dish:pasta", "experience:cinema", "drink:matcha"}
+    assert expected.issubset(steps)
+
+
+@pytest.mark.e2e
+def test_compose_date_rooftop_matcha():
+    resp = client.get(
+        "/api/rails",
+        params={
+            "mode": "light",
+            "q": "i wanna date night rooftop and matcha",
+            "user_lat": 13.75,
+            "user_lng": 100.5,
+            "limit": 12,
+        },
+    )
+    _xfail_if_db_down(resp, "/api/rails date-night")
+    assert resp.status_code == 200
+    rails = resp.json().get("rails", [])
+    assert rails, "Expected rails for date/rooftop/matcha query"
+    steps = {rail.get("step") for rail in rails}
+    expected = {"vibe:romantic", "experience:rooftop", "drink:matcha"}
+    assert expected.issubset(steps)

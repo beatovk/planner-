@@ -1,6 +1,8 @@
 const API_BASE = `${window.location.origin}/api`;
 
 /* ---------- State ---------- */
+const GOOGLE_MAPS_MAX_WAYPOINTS = 23; // лимит waypoints в ссылках Google Maps
+
 const state = {
   steps: [],             // [{label, query, results:[], selected:null}]
   // Default home location (Bangkok). Can be overridden by Home button or geolocation
@@ -322,16 +324,20 @@ function initModeControls() {
       }
 
       console.log(`🗺️ Drift: Building route for ${state.selectedPlaces.length} selected places`);
-      
-      const run = async () => {
-        if (!state.googleMapsLoaded) {
-          await loadGoogleMapsAPI();
-        }
-        showMapContainer();
-        ensureDirections();
-        buildAndRenderRouteFromHome();
-      };
-      run();
+
+      const mapsUrl = buildGoogleMapsRouteUrl();
+      if (!mapsUrl) {
+        alert('Selected places need valid coordinates to open Google Maps route.');
+        return;
+      }
+
+      const popup = window.open(mapsUrl, '_blank', 'noopener');
+      if (!popup || popup.closed) {
+        console.warn('Не удалось открыть Google Maps во всплывающем окне.');
+        alert('Allow pop-ups for this site to open the route in Google Maps.');
+        return;
+      }
+      popup.focus();
     };
   }
   
@@ -645,16 +651,27 @@ function renderRails(){
         maps.href = mapsUrl;
         
         // Показываем компактный рейтинг если есть
-        if (place.rating && place.rating > 0) {
-          ratingEl.style.display = "flex";
-          ratingValue.textContent = place.rating.toFixed(1);
-          // Одна звезда всегда показывается
-          const star = ratingEl.querySelector(".rating-star");
-          if (star) {
-            star.textContent = "⭐";
-          }
+        ratingEl.style.display = "flex";
+        console.log('Rating raw', place.name, place.rating, typeof place.rating);
+        let ratingText = place.rating;
+        if (ratingText === undefined || ratingText === null || ratingText === "") {
+          ratingText = "—";
         } else {
-          ratingEl.style.display = "none";
+          let normalized = ratingText;
+          if (typeof normalized === "string") {
+            normalized = normalized.replace(',', '.').trim();
+          }
+          const parsed = parseFloat(normalized);
+          if (!Number.isNaN(parsed) && Number.isFinite(parsed)) {
+            ratingText = parsed.toFixed(1);
+          } else {
+            ratingText = String(ratingText);
+          }
+        }
+        ratingValue.textContent = ratingText;
+        const star = ratingEl.querySelector(".rating-star");
+        if (star) {
+          star.textContent = "⭐";
         }
         
         // Очистить и добавить теги
@@ -1297,15 +1314,12 @@ function railsToSteps(rails){
     label: r.label || 'Suggested',
     query: 'compose',
     results: (r.items || []).map(it => ({
-      id: it.id,
-      name: it.name,
+      ...it,
       summary: it.summary || '',
       tags_csv: it.tags_csv || '',
       category: it.category || '',
-      lat: it.lat,
-      lng: it.lng,
-      distance_m: it.distance_m ?? null,
-      picture_url: it.picture_url || ''
+      picture_url: it.picture_url || '',
+      distance: it.distance_m ?? it.distance ?? null
     }))
   }));
 }
@@ -1622,6 +1636,81 @@ function ensureDirections() {
   }
 }
 
+function buildGoogleMapsRouteUrl() {
+  const sanitizeLatLng = (lat, lng) => {
+    const latNum = Number(lat);
+    const lngNum = Number(lng);
+    if (!Number.isFinite(latNum) || !Number.isFinite(lngNum)) return null;
+    return `${latNum},${lngNum}`;
+  };
+
+  const buildPlaceParam = place => {
+    if (!place) return null;
+    if (place.gmaps_place_id) {
+      return `place_id:${place.gmaps_place_id}`;
+    }
+    const coords = sanitizeLatLng(place.lat, place.lng);
+    if (coords) return coords;
+    if (place.address) return place.address;
+    if (place.name) return place.name;
+    return null;
+  };
+
+  const placesWithParams = state.selectedPlaces
+    .map(place => ({ place, param: buildPlaceParam(place) }))
+    .filter(item => item.param);
+
+  if (placesWithParams.length === 0) {
+    console.warn('Нет выбранных мест с координатами или place_id для маршрута Google Maps.');
+    return null;
+  }
+
+  const userOrigin = sanitizeLatLng(state.user?.lat, state.user?.lng);
+
+  if (placesWithParams.length === 1) {
+    const singleParam = placesWithParams[0].param;
+    const params = new URLSearchParams();
+    params.set('api', '1');
+    params.set('travelmode', 'walking');
+    params.set('destination', singleParam);
+    if (userOrigin) {
+      params.set('origin', userOrigin);
+    }
+    return `https://www.google.com/maps/dir/?${params.toString()}`;
+  }
+
+  const params = new URLSearchParams();
+  params.set('api', '1');
+  params.set('travelmode', 'walking');
+
+  let originParam = userOrigin;
+  let waypointCandidates = placesWithParams.slice(0, -1);
+  const destinationParam = placesWithParams[placesWithParams.length - 1].param;
+
+  if (!originParam) {
+    originParam = placesWithParams[0].param;
+    waypointCandidates = placesWithParams.slice(1, -1);
+  }
+
+  if (!originParam || !destinationParam) {
+    console.warn('Не удалось сформировать origin или destination для Google Maps.');
+    return null;
+  }
+
+  const waypointParams = waypointCandidates.map(item => item.param).filter(Boolean);
+  if (waypointParams.length > GOOGLE_MAPS_MAX_WAYPOINTS) {
+    console.warn(`Waypoints сокращены с ${waypointParams.length} до ${GOOGLE_MAPS_MAX_WAYPOINTS} для ссылки Google Maps.`);
+  }
+
+  params.set('origin', originParam);
+  params.set('destination', destinationParam);
+  if (waypointParams.length > 0) {
+    params.set('waypoints', waypointParams.slice(0, GOOGLE_MAPS_MAX_WAYPOINTS).join('|'));
+  }
+
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
+
 // Построить маршрут от home (state.user) через выбранные точки по порядку
 function buildAndRenderRouteFromHome() {
   if (!state.googleMap || !state.directionsService || !state.directionsRenderer) return;
@@ -1669,18 +1758,12 @@ function renderRouteStats(directionsResult) {
     const km = (totalMeters / 1000).toFixed(1);
     const mins = Math.round(totalSeconds / 60);
 
-    // Ссылка открыть в Google Maps с порядком следования
-    const origin = `${state.user.lat},${state.user.lng}`;
-    const dest = `${state.selectedPlaces[state.selectedPlaces.length - 1].lat},${state.selectedPlaces[state.selectedPlaces.length - 1].lng}`;
-    const wp = state.selectedPlaces.slice(0, -1).map(p => `${p.lat},${p.lng}`).join('/');
-    const mapsLink = wp
-      ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&waypoints=${encodeURIComponent(wp)}&travelmode=walking`
-      : `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&travelmode=walking`;
+    const mapsLink = buildGoogleMapsRouteUrl();
 
     stats.innerHTML = `
       <div><strong>Distance:</strong> ${km} km</div>
       <div><strong>ETA:</strong> ${mins} min</div>
-      <div style="margin-top:8px;"><a href="${mapsLink}" target="_blank" rel="noopener">Open in Google Maps ↗</a></div>
+      ${mapsLink ? `<div style="margin-top:8px;"><a href="${mapsLink}" target="_blank" rel="noopener">Open in Google Maps ↗</a></div>` : '<div style="margin-top:8px;color:#b00;">Google Maps link unavailable</div>'}
     `;
     info.style.display = 'block';
   } catch (e) {
