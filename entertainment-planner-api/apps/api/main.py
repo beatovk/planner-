@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import asyncio
 from sqlalchemy import text
-from apps.api.routes import health, places, recommend, admin_places, parse, compose, feedback, config
+from apps.api.routes import health, places, recommend, admin_places, parse, compose, feedback, config, rails
 from apps.core.config import settings
 from apps.core.db import engine, DB_URL
 
@@ -34,6 +34,7 @@ app.include_router(recommend.router, tags=["recommendations"])
 app.include_router(admin_places.router, tags=["admin"])
 app.include_router(parse.router, prefix="/api", tags=["parse"])
 app.include_router(compose.router, prefix="/api", tags=["compose"])
+app.include_router(rails.router, prefix="/api", tags=["rails"])
 app.include_router(feedback.router, prefix="/api", tags=["feedback"])
 app.include_router(config.router, prefix="/api", tags=["config"])
 
