@@ -1,5 +1,5 @@
-# fly.toml для PRODUCTION версии (пользователи)
-app = "entertainment-planner-prod"
+# fly.toml для STAGING версии (тестирование)
+app = "entertainment-planner-staging"
 primary_region = "sin"
 
 [build]
@@ -8,16 +8,16 @@ primary_region = "sin"
 [env]
   PORT = "8000"
   PYTHONPATH = "/app"
-  DEBUG = "false"
-  ENVIRONMENT = "production"
-  LOG_LEVEL = "INFO"
+  DEBUG = "true"
+  ENVIRONMENT = "staging"
+  LOG_LEVEL = "DEBUG"
 
 [http_service]
   internal_port = 8000
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
-  min_machines_running = 1
+  min_machines_running = 0
   processes = ["app"]
 
 [[vm]]
@@ -25,4 +25,4 @@ primary_region = "sin"
   cpus = 1
   memory_mb = 512
 
-# Production URL будет: https://entertainment-planner-prod.fly.dev
+# Staging URL будет: https://entertainment-planner-staging.fly.dev
