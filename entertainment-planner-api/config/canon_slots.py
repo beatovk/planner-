@@ -29,11 +29,13 @@ CANON_SLOTS = {
     # ——— COFFEE / TEA / DESSERT ———
     "specialty_coffee":{"kind":"drink","include_tags":["drink:specialty_coffee"],"include_categories":["cafe"]},
     "roastery":       {"kind":"drink","include_tags":["drink:specialty_coffee","feature:roastery"],"include_categories":["cafe"]},
+    "chill":          {"kind":"vibe","include_tags":["vibe:chill","experience:spa","experience:park_stroll","drink:tea_room"],"include_categories":["cafe","spa","park"]},
     "listening_bar":  {"kind":"experience","include_tags":["experience:live_music","vibe:chill"]},
     "jazz_bar":       {"kind":"experience","include_tags":["experience:live_music","vibe:romantic"],"include_categories":["live_music_venue","bar"]},
     "vinyl_bar":      {"kind":"experience","include_tags":["experience:live_music","vibe:trendy"]},
     "tea_room":       {"kind":"drink","include_tags":["drink:tea_room","scenario:tea_ceremony"],"include_categories":["cafe"]},
     "tea":            {"kind":"drink","include_tags":["drink:tea_room","scenario:tea_ceremony"],"include_categories":["cafe"]},
+    "matcha":         {"kind":"drink","include_tags":["drink:tea_room","scenario:tea_ceremony"],"include_categories":["cafe"]},
     "matcha_bar":     {"kind":"drink","include_tags":["drink:tea_room","scenario:tea_ceremony"],"include_categories":["cafe"]},
     "patisserie":     {"kind":"experience","include_tags":["dish:dessert"],"include_categories":["cafe"]},
     "dessert_lab":    {"kind":"experience","include_tags":["dish:dessert","vibe:instagrammable"],"include_categories":["cafe"]},

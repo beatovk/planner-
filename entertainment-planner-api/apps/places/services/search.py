@@ -1002,7 +1002,24 @@ class SearchService:
         if cached is not None:
             return cached
         
-        # Используем только FTS (Postgres MV)
+        # NEW: Try 3-rail slotter first
+        try:
+            from apps.places.services.slotter import create_slotter
+            slotter = create_slotter()
+            slotter_result = slotter.extract_slots(query)
+            
+            if slotter_result.slots:
+                logger.debug(f"Found {len(slotter_result.slots)} slots: {[s.canonical for s in slotter_result.slots]}")
+                
+                # Use slot-based search
+                results = self._search_by_slots(slotter_result.slots, limit, offset, user_lat, user_lng, radius_m, area)
+                if results:
+                    self._cache_set(cache_key, results)
+                    return results
+        except Exception as e:
+            logger.warning(f"Slotter failed, falling back to FTS: {e}")
+        
+        # Fallback to FTS search
         try:
             fts = self._fts_search_pg(query, limit, offset, user_lat, user_lng, area, radius_m)
             if fts:
@@ -1347,6 +1364,96 @@ class SearchService:
             area=area,
             sort="relevance"
         )
+    
+    def _search_by_slots(self, slots: List[Slot], limit: int, offset: int,
+                        user_lat: Optional[float], user_lng: Optional[float],
+                        radius_m: Optional[int], area: Optional[str]) -> List[Dict[str, Any]]:
+        """Поиск по слотам с использованием 3-rail системы."""
+        if not slots:
+            return []
+        
+        # Группируем слоты по типам
+        vibe_slots = [s for s in slots if s.type == SlotType.VIBE]
+        experience_slots = [s for s in slots if s.type == SlotType.EXPERIENCE]
+        dish_slots = [s for s in slots if s.type == SlotType.DISH]
+        drink_slots = [s for s in slots if s.type == SlotType.DRINK]
+        cuisine_slots = [s for s in slots if s.type == SlotType.CUISINE]
+        area_slots = [s for s in slots if s.type == SlotType.AREA]
+        
+        # Собираем результаты по каждому типу слотов
+        all_results = {}
+        
+        # 1. Vibe слоты (приоритет)
+        for slot in vibe_slots:
+            results = self.search_by_slot(slot, limit * 2, 0, user_lat, user_lng, radius_m, area)
+            for result in results:
+                place_id = result['id']
+                if place_id not in all_results:
+                    all_results[place_id] = result
+                    all_results[place_id]['slot_score'] = slot.confidence * 1000
+                else:
+                    all_results[place_id]['slot_score'] += slot.confidence * 500
+        
+        # 2. Experience слоты
+        for slot in experience_slots:
+            results = self.search_by_slot(slot, limit * 2, 0, user_lat, user_lng, radius_m, area)
+            for result in results:
+                place_id = result['id']
+                if place_id not in all_results:
+                    all_results[place_id] = result
+                    all_results[place_id]['slot_score'] = slot.confidence * 800
+                else:
+                    all_results[place_id]['slot_score'] += slot.confidence * 400
+        
+        # 3. Dish слоты
+        for slot in dish_slots:
+            results = self.search_by_slot(slot, limit * 2, 0, user_lat, user_lng, radius_m, area)
+            for result in results:
+                place_id = result['id']
+                if place_id not in all_results:
+                    all_results[place_id] = result
+                    all_results[place_id]['slot_score'] = slot.confidence * 600
+                else:
+                    all_results[place_id]['slot_score'] += slot.confidence * 300
+        
+        # 4. Drink слоты
+        for slot in drink_slots:
+            results = self.search_by_slot(slot, limit * 2, 0, user_lat, user_lng, radius_m, area)
+            for result in results:
+                place_id = result['id']
+                if place_id not in all_results:
+                    all_results[place_id] = result
+                    all_results[place_id]['slot_score'] = slot.confidence * 600
+                else:
+                    all_results[place_id]['slot_score'] += slot.confidence * 300
+        
+        # 5. Cuisine слоты
+        for slot in cuisine_slots:
+            results = self.search_by_slot(slot, limit * 2, 0, user_lat, user_lng, radius_m, area)
+            for result in results:
+                place_id = result['id']
+                if place_id not in all_results:
+                    all_results[place_id] = result
+                    all_results[place_id]['slot_score'] = slot.confidence * 500
+                else:
+                    all_results[place_id]['slot_score'] += slot.confidence * 250
+        
+        # 6. Area слоты
+        for slot in area_slots:
+            results = self.search_by_slot(slot, limit * 2, 0, user_lat, user_lng, radius_m, area)
+            for result in results:
+                place_id = result['id']
+                if place_id not in all_results:
+                    all_results[place_id] = result
+                    all_results[place_id]['slot_score'] = slot.confidence * 400
+                else:
+                    all_results[place_id]['slot_score'] += slot.confidence * 200
+        
+        # Сортируем по slot_score
+        sorted_results = sorted(all_results.values(), key=lambda x: x.get('slot_score', 0), reverse=True)
+        
+        # Применяем offset и limit
+        return sorted_results[offset:offset + limit]
     
     def search_by_slots_fallback(self, limit: int = 50, offset: int = 0,
                                 user_lat: Optional[float] = None, user_lng: Optional[float] = None,
