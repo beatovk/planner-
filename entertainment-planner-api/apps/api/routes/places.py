@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 from sqlalchemy.orm import Session
 from apps.core.db import get_db
 from apps.places.models import Place
-from apps.places.services.search import create_search_service
+from apps.places.services.simple_search import create_simple_search_service
 from apps.api.schemas.place import PlaceResponse, PlaceDetail
 from apps.api.schemas.search import (
     SearchRequest, 
@@ -54,8 +54,8 @@ async def search_places(
     start_time = time.time()
     
     try:
-        # Use smart search service
-        search_service = create_search_service(db)
+        # Use simple search service
+        search_service = create_simple_search_service(db)
         
         # Get search results using smart search
         results = search_service.search_places(
@@ -112,7 +112,7 @@ async def get_search_suggestions(
     db: Session = Depends(get_db)
 ):
     """Get search suggestions based on partial query"""
-    search_service = create_search_service(db)
+    search_service = create_simple_search_service(db)
     
     suggestions = search_service.get_search_suggestions(q, limit)
     
