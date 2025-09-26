@@ -32,7 +32,6 @@ async def apply_epx_schema(db: Session = Depends(get_db)):
                 lng,
                 picture_url,
                 processing_status,
-                search_vector,
                 updated_at,
                 published_at
             FROM places
