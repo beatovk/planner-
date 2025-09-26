@@ -20,7 +20,7 @@ class FeatureFlags:
     def _load_from_env(self) -> None:
         """Load feature flags from environment variables."""
         # Slotter feature flags
-        self._flags['SLOTTER_WIDE'] = os.getenv('SLOTTER_WIDE', 'off').lower() in ['on', 'true', '1']
+        self._flags['SLOTTER_WIDE'] = os.getenv('SLOTTER_WIDE', 'on').lower() in ['on', 'true', '1']
         self._flags['SLOTTER_SHADOW'] = os.getenv('SLOTTER_SHADOW', 'off').lower() in ['on', 'true', '1']
         self._flags['SLOTTER_AB_TEST'] = os.getenv('SLOTTER_AB_TEST', 'off').lower() in ['on', 'true', '1']
         self._flags['SLOTTER_DEBUG'] = os.getenv('SLOTTER_DEBUG', 'off').lower() in ['on', 'true', '1']
