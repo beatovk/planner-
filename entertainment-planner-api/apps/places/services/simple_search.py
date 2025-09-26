@@ -110,7 +110,11 @@ class SimpleSearchService:
                     'search_score': 100,  # Simple score
                     'rank': 1.0,
                     'distance_m': None,
-                    'signals': {}
+                    'signals': {},
+                    # Add required fields for Pydantic validation
+                    'gmaps_place_id': None,
+                    'gmaps_url': None,
+                    'rating': None
                 }
                 
                 # Calculate distance if geo coordinates provided
@@ -191,7 +195,11 @@ class SimpleSearchService:
                     'search_score': 100,
                     'rank': 1.0,
                     'distance_m': None,
-                    'signals': {}
+                    'signals': {},
+                    # Add required fields for Pydantic validation
+                    'gmaps_place_id': None,
+                    'gmaps_url': None,
+                    'rating': None
                 }
                 
                 if (user_lat is not None and user_lng is not None and 
