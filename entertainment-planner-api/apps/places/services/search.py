@@ -1004,18 +1004,22 @@ class SearchService:
         
         # NEW: Try 3-rail slotter first
         try:
-            from apps.places.services.slotter import create_slotter
-            slotter = create_slotter()
-            slotter_result = slotter.extract_slots(query)
+            from apps.places.services.query_builder import create_query_builder
+            from apps.core.feature_flags import should_use_slotter, should_log_slotter
             
-            if slotter_result.slots:
-                logger.debug(f"Found {len(slotter_result.slots)} slots: {[s.canonical for s in slotter_result.slots]}")
+            if should_use_slotter(query):
+                query_builder = create_query_builder()
+                slotter_result = query_builder.build_slots(query)
                 
-                # Use slot-based search
-                results = self._search_by_slots(slotter_result.slots, limit, offset, user_lat, user_lng, radius_m, area)
-                if results:
-                    self._cache_set(cache_key, results)
-                    return results
+                if should_log_slotter(query):
+                    logger.info(f"Slotter result: {len(slotter_result.slots)} slots: {[s.canonical for s in slotter_result.slots]}")
+                
+                if slotter_result.slots:
+                    # Use slot-based search
+                    results = self._search_by_slots(slotter_result.slots, limit, offset, user_lat, user_lng, radius_m, area)
+                    if results:
+                        self._cache_set(cache_key, results)
+                        return results
         except Exception as e:
             logger.warning(f"Slotter failed, falling back to FTS: {e}")
         

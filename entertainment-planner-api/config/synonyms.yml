@@ -48,814 +48,145 @@ slots:
 
   - type: vibe
     canonical: instagrammable
-    synonyms: [instagrammable, aesthetic, photo spot, design driven]
+    synonyms: [instagrammable, instagram, photo worthy, photogenic, aesthetic]
     expands_to_tags: [vibe:instagrammable]
 
-  - type: vibe
-    canonical: trendy
-    synonyms: [trendy, hip, cool, fashionable, stylish]
-    expands_to_tags: [vibe:trendy]
-
   # -------------------------
-  # EXPERIENCES (rich set)
+  # EXPERIENCES
   # -------------------------
   - type: experience
     canonical: rooftop
-    synonyms: [rooftop, roof top, sky bar, skyline view, panorama, roof-top, skybar, sky-bar, rooftop bar, roof terrace, terrace bar, skyline, panoramic view, sunset view]
-    expands_to_tags: [experience:rooftop, view:skyline, vibe:scenic]
-
-  - type: experience
-    canonical: live_music
-    synonyms: [live music, jazz bar, band night, acoustic set, live band, jazz club, gig, live show]
-    expands_to_tags: [experience:live_music]
-
-  - type: experience
-    canonical: tasting
-    synonyms: [tasting menu, chef's table, degustation, pairing]
-    expands_to_tags: [experience:tasting]
-
-  - type: experience
-    canonical: spa
-    synonyms: [spa, wellness spa, day spa, treatment, wellness, massage]
-    expands_to_tags: [experience:spa]
-
-  - type: experience
-    canonical: onsen
-    synonyms: [onsen, hot spring bath, sento, hot spring, hot-spring, bathhouse]
-    expands_to_tags: [experience:onsen]
-
-  - type: experience
-    canonical: park_stroll
-    synonyms: [park walk, green stroll, garden walk, park stroll, promenade, waterfront, riverfront, riverside, boardwalk]
-    expands_to_tags: [experience:park_stroll, view:green]
-
-  - type: experience
-    canonical: aquarium
-    synonyms: [aquarium, sea life, marine world]
-    expands_to_tags: [experience:aquarium]
-
-  - type: experience
-    canonical: planetarium
-    synonyms: [planetarium, stargazing dome, space show]
-    expands_to_tags: [experience:planetarium]
-
-  - type: experience
-    canonical: night_market
-    synonyms: [night market, street market at night, bazaar, street market, street food market, night bazaar]
-    expands_to_tags: [experience:night_market, vibe:local]
+    synonyms: [rooftop, roof top, roof-top, skybar, sky bar, sky-bar, rooftop bar, rooftop restaurant]
+    expands_to_tags: [experience:rooftop, view:skyline]
 
   - type: experience
     canonical: gallery
-    synonyms: [gallery, art gallery, exhibition space, art space]
-    expands_to_tags: [experience:gallery, vibe:artsy]
+    synonyms: [gallery, art gallery, exhibition, art exhibit, museum, art space]
+    expands_to_tags: [experience:gallery, category:gallery]
 
   - type: experience
-    canonical: cinema_indie
-    synonyms: [indie cinema, arthouse cinema, film house, open air cinema, open-air cinema, outdoor cinema]
-    expands_to_tags: [experience:cinema_indie]
+    canonical: spa
+    synonyms: [spa, massage, wellness, relaxation, thai massage, luxury spa]
+    expands_to_tags: [experience:spa, category:spa]
 
   - type: experience
-    canonical: boat_cruise
-    synonyms: [river cruise, dinner cruise, boat dinner, chao phraya cruise, boat dinner, sunset cruise, river cruise dinner]
-    expands_to_tags: [experience:boat_cruise, view:riverside]
+    canonical: live_music
+    synonyms: [live music, live band, concert, music venue, jazz, blues, acoustic]
+    expands_to_tags: [experience:live_music, category:live_music_venue]
 
   - type: experience
-    canonical: karaoke
-    synonyms: [karaoke, sing room, private karaoke]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: arcade
-    synonyms: [arcade, game center, coin-op]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: vr_experience
-    synonyms: [vr arcade, virtual reality arena, vr games]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: bowling
-    synonyms: [bowling, bowling alley]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: billiards
-    synonyms: [billiards, pool hall, snooker]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: karting
-    synonyms: [karting, go kart, go-kart]
-    expands_to_tags: [experience:karting, experience:live_music]
-
-  - type: experience
-    canonical: climbing
-    synonyms: [climb, climbing, climbing gym, bouldering gym, rock climbing]
-    expands_to_tags: [experience:climbing]
-
-  - type: experience
-    canonical: trampoline
-    synonyms: [trampoline park, free jump, bounce park]
-    expands_to_tags: [experience:trampoline, experience:live_music]
-
-  - type: experience
-    canonical: ice_skating
-    synonyms: [ice skating, ice rink, skating rink]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: water_park
-    synonyms: [water park, slides park, splash park]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: theme_park
-    synonyms: [theme park, amusement park]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: massage
-    synonyms: [thai massage, foot massage, spa massage]
-    expands_to_tags: [experience:spa]  # map massage-like to spa umbrella
-
-  - type: experience
-    canonical: cooking_class
-    synonyms: [cooking class, thai cooking class, culinary class]
-    expands_to_tags: [experience:gallery]  # map to existing experience
-
-  - type: experience
-    canonical: pottery_class
-    synonyms: [pottery class, ceramics class, wheel throwing]
-    expands_to_tags: [experience:gallery]  # map to existing experience
-
-  - type: experience
-    canonical: tea_ceremony
-    synonyms: [tea ceremony, matcha ritual, tea tasting]
-    expands_to_tags: [experience:gallery, drink:tea_room]  # map to existing experience
-
-  - type: experience
-    canonical: river_walk
-    synonyms: [riverfront walk, riverside stroll]
-    expands_to_tags: [experience:park_stroll, view:riverside]
-
-  - type: experience
-    canonical: muay_thai_class
-    synonyms: [muay thai class, thai boxing class]
-    expands_to_tags: [experience:muay_thai_gym, experience:live_music]
-
-  - type: experience
-    canonical: escape_room
-    synonyms: [escape room, puzzle room]
-    expands_to_tags: [experience:escape_room, experience:live_music]
-
-  - type: experience
-    canonical: board_games
-    synonyms: [board game cafe, board games]
-    expands_to_tags: [experience:board_games, experience:live_music]
-
-  - type: experience
-    canonical: cinema
-    synonyms: [cinema, movie theater, movie theatre, theater, theatre, movies]
-    expands_to_tags: [experience:cinema_indie, category:cinema]
+    canonical: park_stroll
+    synonyms: [park, stroll, walk, nature, green, botanical garden, garden]
+    expands_to_tags: [experience:park_stroll, category:park]
 
   # -------------------------
-  # DRINKS / BAR MODES
+  # DRINKS
   # -------------------------
-  - type: drink
-    canonical: specialty_coffee
-    synonyms: [specialty coffee, third wave, filter coffee, roastery, coffee, café, cafe, coffee shop, third-wave, espresso bar, pour over, pour-over]
-    expands_to_tags: [drink:specialty_coffee]
-
-  - type: drink
-    canonical: tea_room
-    synonyms: [tea room, afternoon tea, high tea, tea house]
-    expands_to_tags: [drink:tea_room]
-
   - type: drink
     canonical: matcha
-    synonyms: [matcha, green tea, ceremonial matcha, matcha latte, matcha ceremony, 抹茶]
-    expands_to_tags: [drink:specialty_coffee, drink:tea_room, dish:matcha, cuisine:japanese]
+    synonyms: [matcha, green tea, japanese tea, tea ceremony]
+    expands_to_tags: [drink:tea_room, scenario:tea_ceremony]
 
   - type: drink
-    canonical: natural_wine
-    synonyms: [natural wine, natty wine, orange wine, pet nat, minimal intervention, skin-contact, wine bar]
-    expands_to_tags: [drink:natural_wine, vibe:trendy]
+    canonical: coffee
+    synonyms: [coffee, cafe, specialty coffee, espresso, latte, cappuccino]
+    expands_to_tags: [drink:specialty_coffee, category:cafe]
 
   - type: drink
-    canonical: wine_bar
-    synonyms: [wine bar, wine lounge]
-    expands_to_tags: [drink:wine_bar]
+    canonical: cocktail
+    synonyms: [cocktail, cocktail bar, mixology, craft cocktail, signature drink]
+    expands_to_tags: [drink:cocktail_bar, category:bar]
 
   - type: drink
-    canonical: cocktail_bar
-    synonyms: [cocktail bar, mixology bar, speakeasy, cocktails, cocktail lab]
-    expands_to_tags: [drink:cocktail_bar]
+    canonical: wine
+    synonyms: [wine, wine bar, natural wine, wine tasting, sommelier]
+    expands_to_tags: [drink:wine_bar, category:bar]
 
   - type: drink
     canonical: craft_beer
-    synonyms: [craft beer, taproom, microbrew, craft beer bar, microbrewery, micro-brewery, ipa, pale ale, stout, porter, beer flight]
-    expands_to_tags: [drink:craft_beer]
-
-  - type: drink
-    canonical: sake
-    synonyms: [sake bar, nihonshu]
-    expands_to_tags: [drink:sake, cuisine:japanese]
+    synonyms: [craft beer, beer, brewery, taproom, microbrew, local beer]
+    expands_to_tags: [drink:craft_beer, category:bar]
 
   # -------------------------
-  # CUISINES (broad)
-  # -------------------------
-  - type: cuisine
-    canonical: thai
-    synonyms: [thai, isaan, central thai, southern thai, northern thai]
-    expands_to_tags: [cuisine:thai]
-
-  - type: cuisine
-    canonical: japanese
-    synonyms: [japanese, nihon, 和食, washoku]
-    expands_to_tags: [cuisine:japanese]
-
-  - type: cuisine
-    canonical: korean
-    synonyms: [korean, hanguk, 한식]
-    expands_to_tags: [cuisine:korean]
-
-  - type: cuisine
-    canonical: chinese
-    synonyms: [chinese, zhongcan, 中餐]
-    expands_to_tags: [cuisine:chinese]
-
-  - type: cuisine
-    canonical: cantonese
-    synonyms: [cantonese, 粤菜, yum cha]
-    expands_to_tags: [cuisine:chinese]
-
-  - type: cuisine
-    canonical: sichuan
-    synonyms: [sichuan, sichuanese, 川菜, chuan cai]
-    expands_to_tags: [cuisine:chinese]
-
-  - type: cuisine
-    canonical: vietnamese
-    synonyms: [vietnamese, viet]
-    expands_to_tags: [cuisine:vietnamese]
-
-  - type: cuisine
-    canonical: indian
-    synonyms: [indian, north indian, south indian]
-    expands_to_tags: [cuisine:indian]
-
-  - type: cuisine
-    canonical: italian
-    synonyms: [italian, trattoria, osteria]
-    expands_to_tags: [cuisine:italian]
-
-  - type: cuisine
-    canonical: french
-    synonyms: [french, bistro]
-    expands_to_tags: [cuisine:french]
-
-  - type: cuisine
-    canonical: mediterranean
-    synonyms: [mediterranean, mezze, levantine]
-    expands_to_tags: [cuisine:mediterranean]
-
-  - type: cuisine
-    canonical: mexican
-    synonyms: [mexican, taqueria]
-    expands_to_tags: [cuisine:mexican]
-
-  - type: cuisine
-    canonical: spanish
-    synonyms: [spanish, tapas, paella]
-    expands_to_tags: [cuisine:mediterranean]
-
-  - type: cuisine
-    canonical: middle_eastern
-    synonyms: [middle eastern, lebanese, turkish, persian]
-    expands_to_tags: [cuisine:mediterranean]
-
-  - type: cuisine
-    canonical: american
-    synonyms: [american, bbq, smokehouse]
-    expands_to_tags: [cuisine:american]
-
-  - type: cuisine
-    canonical: seafood
-    synonyms: [seafood, fish market, grill seafood]
-    expands_to_tags: [cuisine:seafood]
-
-  - type: cuisine
-    canonical: steakhouse
-    synonyms: [steakhouse, chophouse]
-    expands_to_tags: [cuisine:steakhouse]
-
-  # -------------------------
-  # DISHES — STRICT (exact dish:* in ontology)
+  # DISHES
   # -------------------------
   - type: dish
     canonical: tom_yum
-    synonyms: [tom yum, tom yam, ต้มยำ, tom yam kung, tom-yum, tom-yam, tomyum]
+    synonyms: [tom yum, tom yam, thai soup, spicy soup, hot and sour soup]
     expands_to_tags: [dish:tom_yum, cuisine:thai]
-    denylist: [tomato]
-
-  - type: dish
-    canonical: ramen
-    synonyms: [ramen, tonkotsu ramen, shoyu ramen, miso ramen]
-    expands_to_tags: [dish:ramen, cuisine:japanese]
 
   - type: dish
     canonical: sushi
-    synonyms: [sushi, nigiri, sashimi, maki]
+    synonyms: [sushi, sashimi, japanese, omakase, nigiri, maki]
     expands_to_tags: [dish:sushi, cuisine:japanese]
 
   - type: dish
     canonical: pizza
-    synonyms: [pizza, pizzeria, neapolitan pizza]
+    synonyms: [pizza, italian, margherita, neapolitan, wood fired]
     expands_to_tags: [dish:pizza, cuisine:italian]
 
   - type: dish
-    canonical: burger
-    synonyms: [burger, cheeseburger]
-    expands_to_tags: [dish:burger, cuisine:american]
-
-  - type: dish
     canonical: pasta
-    synonyms: [pasta, tagliatelle, spaghetti, rigatoni]
+    synonyms: [pasta, spaghetti, carbonara, bolognese, italian]
     expands_to_tags: [dish:pasta, cuisine:italian]
 
   - type: dish
-    canonical: steak
-    synonyms: [steak, ribeye, tenderloin, sirloin]
-    expands_to_tags: [cuisine:american]  # map to cuisine since dish:steak doesn't exist
-
-  - type: dish
-    canonical: dim_sum
-    synonyms: [dim sum, yum cha]
-    expands_to_tags: [dish:dim_sum, cuisine:chinese]
-
-  - type: dish
-    canonical: tacos
-    synonyms: [tacos, taqueria]
-    expands_to_tags: [dish:tacos, cuisine:mexican]
-
-  - type: dish
-    canonical: dessert
-    synonyms: [dessert, patisserie, cake slice]
-    expands_to_tags: [cuisine:thai]  # map to cuisine since dish:dessert doesn't exist
+    canonical: burger
+    synonyms: [burger, hamburger, beef burger, gourmet burger]
+    expands_to_tags: [dish:burger, category:restaurant]
 
   # -------------------------
-  # DISH → CUISINE BRIDGE (no new dish tags; map to cuisine)
+  # CUISINES
   # -------------------------
-  - type: dish
-    canonical: pad_thai
-    synonyms: [pad thai, ผัดไทย]
+  - type: cuisine
+    canonical: thai
+    synonyms: [thai, thailand, thai food, authentic thai, traditional thai]
     expands_to_tags: [cuisine:thai]
 
-  - type: dish
-    canonical: som_tam
-    synonyms: [som tam, papaya salad, ส้มตำ]
-    expands_to_tags: [cuisine:thai]
+  - type: cuisine
+    canonical: japanese
+    synonyms: [japanese, japan, japanese food, authentic japanese]
+    expands_to_tags: [cuisine:japanese]
 
-  - type: dish
-    canonical: khao_soi
-    synonyms: [khao soi, ข้าวซอย]
-    expands_to_tags: [cuisine:thai]
+  - type: cuisine
+    canonical: italian
+    synonyms: [italian, italy, italian food, authentic italian]
+    expands_to_tags: [cuisine:italian]
 
-  - type: dish
-    canonical: pad_kra_pao
-    synonyms: [pad kra pao, basil pork, ผัดกะเพรา]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: khao_man_gai
-    synonyms: [khao man gai, hainan chicken rice, ข้าวมันไก่]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: boat_noodles
-    synonyms: [boat noodles, ก๋วยเตี๋ยวเรือ]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: yen_ta_fo
-    synonyms: [yen ta fo, เย็นตาโฟ]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: hoy_tod
-    synonyms: [hoy tod, oyster omelette, หอยทอด]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: moo_kata
-    synonyms: [mookata, moo kata, thai bbq, หมูกระทะ]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: thai_suki
-    synonyms: [thai suki, sukiyaki thai, สุกี้]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: gai_yang
-    synonyms: [gai yang, grilled chicken, ไก่ย่าง]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: sai_ua
-    synonyms: [sai ua, northern sausage, ไส้อั่ว]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: larb
-    synonyms: [larb, laap, ลาบ]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: nam_tok
-    synonyms: [nam tok, น้ำตก]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: kao_ka_moo
-    synonyms: [khao kha moo, braised pork leg rice, ข้าวขาหมู]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: mango_sticky_rice
-    synonyms: [mango sticky rice, ข้าวเหนียวมะม่วง]
-    expands_to_tags: [cuisine:thai]  # map to cuisine since dish:dessert doesn't exist
-
-  - type: dish
-    canonical: roti_mataba
-    synonyms: [roti mataba, murtabak, โรตีมะตะบะ]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: thai_curry
-    synonyms: [green curry, red curry, massaman, panang]
-    expands_to_tags: [cuisine:thai]
-
-  - type: dish
-    canonical: pho
-    synonyms: [pho, phở]
-    expands_to_tags: [cuisine:vietnamese]
-
-  - type: dish
-    canonical: bun_cha
-    synonyms: [bun cha, bún chả]
-    expands_to_tags: [cuisine:vietnamese]
-
-  - type: dish
-    canonical: banh_mi
-    synonyms: [banh mi, bánh mì]
-    expands_to_tags: [cuisine:vietnamese]
-
-  - type: dish
-    canonical: currywurst
-    synonyms: [currywurst]
-    expands_to_tags: [cuisine:american]
-
-  - type: dish
-    canonical: biryani
-    synonyms: [biryani, briyani]
-    expands_to_tags: [cuisine:indian]
-
-  - type: dish
-    canonical: dosa
-    synonyms: [dosa, masala dosa]
-    expands_to_tags: [cuisine:indian]
-
-  - type: dish
-    canonical: tikka_masala
-    synonyms: [tikka masala, butter chicken]
-    expands_to_tags: [cuisine:indian]
-
-  - type: dish
-    canonical: bibimbap
-    synonyms: [bibimbap, 돌솥비빔밥]
+  - type: cuisine
+    canonical: korean
+    synonyms: [korean, korea, korean food, korean bbq, authentic korean]
     expands_to_tags: [cuisine:korean]
 
-  - type: dish
-    canonical: kimchi_jjigae
-    synonyms: [kimchi jjigae, kimchi stew]
-    expands_to_tags: [cuisine:korean]
-
-  - type: dish
-    canonical: tteokbokki
-    synonyms: [tteokbokki, topokki, 떡볶이]
-    expands_to_tags: [cuisine:korean]
-
-  - type: dish
-    canonical: hotpot
-    synonyms: [hot pot, mala hotpot, huo guo]
+  - type: cuisine
+    canonical: chinese
+    synonyms: [chinese, china, chinese food, authentic chinese, cantonese]
     expands_to_tags: [cuisine:chinese]
 
-  - type: dish
-    canonical: mapo_tofu
-    synonyms: [mapo tofu, 麻婆豆腐]
-    expands_to_tags: [cuisine:chinese]
-
-  - type: dish
-    canonical: yakitori
-    synonyms: [yakitori, grilled skewers]
-    expands_to_tags: [cuisine:japanese]
-
-  - type: dish
-    canonical: yakiniku
-    synonyms: [yakiniku, japanese bbq]
-    expands_to_tags: [cuisine:japanese]
-
-  - type: dish
-    canonical: shabu_shabu
-    synonyms: [shabu shabu]
-    expands_to_tags: [cuisine:japanese]
-
-  - type: dish
-    canonical: tempura
-    synonyms: [tempura]
-    expands_to_tags: [cuisine:japanese]
-
-  - type: dish
-    canonical: ceviche
-    synonyms: [ceviche]
-    expands_to_tags: [cuisine:seafood]
-
-  - type: dish
-    canonical: paella
-    synonyms: [paella]
-    expands_to_tags: [cuisine:mediterranean]
-
-  - type: dish
-    canonical: hummus
-    synonyms: [hummus]
-    expands_to_tags: [cuisine:mediterranean]
-
   # -------------------------
-  # FOOD MODES (izakaya/omakase etc.)
-  # -------------------------
-  - type: experience
-    canonical: izakaya
-    synonyms: [izakaya, japanese pub]
-    expands_to_tags: [experience:live_music, cuisine:japanese]  # map to existing experience
-
-  - type: experience
-    canonical: omakase
-    synonyms: [omakase, chef choice sushi, chef's choice]
-    expands_to_tags: [experience:tasting, cuisine:japanese, dish:sushi]  # map to existing experience
-
-  # -------------------------
-  # QUALITY / FORMAT
-  # -------------------------
-  - type: experience
-    canonical: sunday_brunch
-    synonyms: [sunday brunch, brunch buffet, hotel brunch, late breakfast, all day breakfast, all-day breakfast, brunch set, eggs benedict, pancakes, french toast, avocado toast]
-    expands_to_tags: [experience:tasting, price:$$$]
-
-  - type: experience
-    canonical: premium_buffet
-    synonyms: [premium buffet, high-end buffet]
-    expands_to_tags: [experience:tasting, price:$$$]
-
-  - type: experience
-    canonical: open_kitchen
-    synonyms: [open kitchen, show kitchen, chef counter]
-    expands_to_tags: [experience:tasting]  # map to existing experience
-
-  - type: experience
-    canonical: chef_table
-    synonyms: [chef's table, chefs table]
-    expands_to_tags: [experience:tasting, vibe:premium]  # map to existing experience
-
-  - type: experience
-    canonical: afternoon_tea
-    synonyms: [afternoon tea, high tea, tea tower]
-    expands_to_tags: [drink:tea_room, vibe:premium]
-
-  # -------------------------
-  # AREAS / DISTRICTS / MALLS / POIs
+  # AREAS
   # -------------------------
   - type: area
     canonical: sukhumvit
-    synonyms: [sukhumvit, สุขุมวิท]
+    synonyms: [sukhumvit, sukhumvit road, sukhumvit area]
     expands_to_tags: [area:sukhumvit]
 
   - type: area
-    canonical: thonglor
-    synonyms: [thonglor, thong lo, ทองหล่อ]
-    expands_to_tags: [area:thonglor]
-
-  - type: area
-    canonical: ekkamai
-    synonyms: [ekkamai, เอกมัย]
-    expands_to_tags: [area:ekkamai]
-
-  - type: area
-    canonical: asok
-    synonyms: [asok, asoke]
-    expands_to_tags: [area:asok]
-
-  - type: area
-    canonical: phrom_phong
-    synonyms: [phrom phong, prom phong]
-    expands_to_tags: [area:phrom_phong]
-
-  - type: area
-    canonical: nana
-    synonyms: [nana]
-    expands_to_tags: [area:nana]
-
-  - type: area
-    canonical: ploenchit
-    synonyms: [ploenchit, phloen chit]
-    expands_to_tags: [area:ploenchit]
-
-  - type: area
-    canonical: siam
-    synonyms: [siam, siam square]
-    expands_to_tags: [area:siam]
-
-  - type: area
     canonical: silom
-    synonyms: [silom]
+    synonyms: [silom, silom road, silom area, business district]
     expands_to_tags: [area:silom]
 
   - type: area
-    canonical: sathorn
-    synonyms: [sathorn, sathon]
-    expands_to_tags: [area:sathorn]
-
-  - type: area
-    canonical: ari
-    synonyms: [ari, aree]
-    expands_to_tags: [area:ari]
-
-  - type: area
-    canonical: phaya_thai
-    synonyms: [phaya thai]
-    expands_to_tags: [area:phaya_thai]
-
-  - type: area
-    canonical: victory_monument
-    synonyms: [victory monument, anusaowari]
-    expands_to_tags: [area:victory_monument]
-
-  - type: area
-    canonical: ratchada
-    synonyms: [ratchada, rama 9, rama ix]
-    expands_to_tags: [area:ratchada]
-
-  - type: area
-    canonical: ladprao
-    synonyms: [ladprao, lat phrao]
-    expands_to_tags: [area:ladprao]
+    canonical: siam
+    synonyms: [siam, siam square, siam area, shopping district]
+    expands_to_tags: [area:siam]
 
   - type: area
     canonical: chinatown
-    synonyms: [chinatown, yaowarat, เยาวราช]
+    synonyms: [chinatown, yaowarat, chinese quarter]
     expands_to_tags: [area:chinatown]
 
   - type: area
-    canonical: phra_nakhon
-    synonyms: [old town, phra nakhon]
-    expands_to_tags: [area:phra_nakhon]
-
-  - type: area
-    canonical: riverside
-    synonyms: [riverside, chao phraya]
-    expands_to_tags: [area:riverside, view:riverside]
-
-  - type: area
-    canonical: charoen_krung
-    synonyms: [charoen krung, talat noi]
-    expands_to_tags: [area:charoen_krung]
-
-  - type: area
-    canonical: bang_rak
-    synonyms: [bang rak]
-    expands_to_tags: [area:bang_rak]
-
-  - type: area
-    canonical: on_nut
-    synonyms: [on nut, onnuch]
-    expands_to_tags: [area:on_nut]
-
-  - type: area
-    canonical: udom_suk
-    synonyms: [udom suk, udomsuk]
-    expands_to_tags: [area:udom_suk]
-
-  - type: area
-    canonical: bang_na
-    synonyms: [bang na, bangna]
-    expands_to_tags: [area:bangna]
-
-  - type: area
-    canonical: icon_siam
-    synonyms: [iconsiam, icon siam]
-    expands_to_tags: [area:iconsiam]
-
-  - type: area
-    canonical: emquartier
-    synonyms: [emquartier, em quartier]
-    expands_to_tags: [area:emquartier]
-
-  - type: area
-    canonical: emporium
-    synonyms: [emporium]
-    expands_to_tags: [area:emporium]
-
-  - type: area
-    canonical: paragon
-    synonyms: [siam paragon, paragon]
-    expands_to_tags: [area:paragon]
-
-  - type: area
-    canonical: centralworld
-    synonyms: [centralworld, central world]
-    expands_to_tags: [area:centralworld]
-
-  - type: area
-    canonical: mbk
-    synonyms: [mbk, mahboonkrong]
-    expands_to_tags: [area:mbk]
-
-  - type: area
-    canonical: terminal21
-    synonyms: [terminal 21, t21]
-    expands_to_tags: [area:terminal21]
-
-  - type: area
-    canonical: asiatique
-    synonyms: [asiatique, riverfront night market]
-    expands_to_tags: [area:asiatique]
-
-  - type: area
-    canonical: chatuchak
-    synonyms: [chatuchak, jj market]
-    expands_to_tags: [area:chatuchak]
-
-  # -------------------------
-  # SPECIAL MODES / FLAGS
-  # -------------------------
-  - type: experience
-    canonical: dateworthy
-    synonyms: [dateworthy, perfect date, date spot]
-    expands_to_tags: [scenario:date, vibe:romantic]
-
-  - type: experience
-    canonical: remote_work
-    synonyms: [remote work, laptop friendly, power outlets]
-    expands_to_tags: [scenario:solo, vibe:chill]  # map to existing scenario
-
-  - type: experience
-    canonical: late_night
-    synonyms: [open late, late night, after midnight]
-    expands_to_tags: [experience:live_music]  # map to existing experience
-
-  - type: experience
-    canonical: pet_friendly
-    synonyms: [pet friendly, dogs allowed]
-    expands_to_tags: [experience:park_stroll]  # map to existing experience
-
-  - type: experience
-    canonical: kid_friendly
-    synonyms: [kid friendly, family friendly, stroller ok]
-    expands_to_tags: [scenario:friends, experience:aquarium]  # map to existing scenario/experience
-
-  - type: experience
-    canonical: reservation_required
-    synonyms: [reservation only, booking required, book in advance]
-    expands_to_tags: [experience:tasting]  # map to existing experience
-
-  # -------------------------
-  # DIETARY RESTRICTIONS
-  # -------------------------
-  - type: experience
-    canonical: vegan
-    synonyms: [vegan, plant based, plant-based, vegan friendly]
-    expands_to_tags: [cuisine:thai]  # map to existing cuisine
-
-  - type: experience
-    canonical: vegetarian
-    synonyms: [vegetarian, veggie friendly, meat-free, vegetarian friendly]
-    expands_to_tags: [cuisine:indian]  # map to existing cuisine
-
-  - type: experience
-    canonical: halal
-    synonyms: [halal, halal friendly]
-    expands_to_tags: [cuisine:middle_eastern]  # map to existing cuisine
-
-  - type: experience
-    canonical: gluten_free
-    synonyms: [gluten free, gluten-free, gf]
-    expands_to_tags: [cuisine:thai]  # map to existing cuisine
-
-  # -------------------------
-  # PARK / GREEN SPACES
-  # -------------------------
-  - type: experience
-    canonical: park
-    synonyms: [park, urban park, city park, public park, green space, garden, botanical garden]
-    expands_to_tags: [experience:park_stroll, view:green]
+    canonical: thonglor
+    synonyms: [thonglor, thong lo, thonglor area, trendy area]
+    expands_to_tags: [area:thonglor]

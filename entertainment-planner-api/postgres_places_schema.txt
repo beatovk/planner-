@@ -1,0 +1,43 @@
+=== PostgreSQL places table structure ===
+Column Name                 | Data Type           | Nullable | Default                    | Max Length | Position
+------------------------------------------------------------------------------------------------------------------------
+id                        | integer            | NO       | nextval('places_id_seq'::regclass) | None       | 1
+source                    | text               | YES      | None                      | None       | 2
+source_url                | text               | YES      | None                      | None       | 3
+raw_payload               | text               | YES      | None                      | None       | 4
+scraped_at                | timestamp without time zone | YES      | None                      | None       | 5
+lat                       | double precision   | YES      | None                      | None       | 6
+lng                       | double precision   | YES      | None                      | None       | 7
+address                   | text               | YES      | None                      | None       | 8
+gmaps_place_id            | text               | YES      | None                      | None       | 9
+gmaps_url                 | text               | YES      | None                      | None       | 10
+business_status           | text               | YES      | None                      | None       | 11
+utc_offset_minutes        | integer            | YES      | None                      | None       | 12
+name                      | text               | YES      | None                      | None       | 13
+category                  | text               | YES      | None                      | None       | 14
+description_full          | text               | YES      | None                      | None       | 15
+summary                   | text               | YES      | None                      | None       | 16
+tags_csv                  | text               | YES      | None                      | None       | 17
+price_level               | integer            | YES      | None                      | None       | 18
+rating                    | double precision   | YES      | None                      | None       | 19
+hours_json                | text               | YES      | None                      | None       | 20
+picture_url               | text               | YES      | None                      | None       | 21
+website                   | text               | YES      | None                      | None       | 22
+phone                     | text               | YES      | None                      | None       | 23
+processing_status         | text               | YES      | None                      | None       | 24
+last_error                | text               | YES      | None                      | None       | 25
+published_at              | timestamp without time zone | YES      | None                      | None       | 26
+updated_at                | timestamp without time zone | YES      | None                      | None       | 27
+summary_source            | text               | YES      | None                      | None       | 28
+summary_version           | integer            | YES      | None                      | None       | 29
+ai_verified               | text               | YES      | None                      | None       | 30
+ai_verification_date      | timestamp without time zone | YES      | None                      | None       | 31
+ai_verification_data      | text               | YES      | None                      | None       | 32
+interest_signals          | json               | YES      | None                      | None       | 33
+attempts                  | text               | YES      | None                      | None       | 34
+quality_flags             | text               | YES      | None                      | None       | 35
+tag_bitset                | integer            | YES      | None                      | None       | 36
+category_id               | integer            | YES      | None                      | None       | 37
+sig_hash                  | character varying  | YES      | None                      | 32         | 38
+signals                   | jsonb              | YES      | '{}'::jsonb               | None       | 39
+search_vector             | tsvector           | YES      | None                      | None       | 40
