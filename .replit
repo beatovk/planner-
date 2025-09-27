@@ -1,0 +1,1 @@
+run = "pip install -r entertainment-planner-api/requirements.txt && uvicorn apps.api.main:app --app-dir entertainment-planner-api --host 0.0.0.0 --port $PORT --workers 1"
