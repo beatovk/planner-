@@ -2,10 +2,21 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import asyncio
+import logging
+import os
 from sqlalchemy import text
-from apps.api.routes import health, places, recommend, admin_places, parse, compose, feedback, config
-from apps.core.config import settings
-from apps.core.db import engine, DB_URL
+
+from apps.api.routes import (
+    health,
+    places,
+    recommend,
+    admin_places,
+    parse,
+    compose,
+    feedback,
+    config,
+)
+from apps.core.db import engine
 
 # Create FastAPI app
 app = FastAPI(
@@ -25,7 +36,7 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(health.router, prefix="/api", tags=["health"])
+app.include_router(health.router, prefix="/api")
 app.include_router(places.router, prefix="/api", tags=["places"])
 app.include_router(recommend.router, tags=["recommendations"])
 app.include_router(admin_places.router, tags=["admin"])
@@ -40,15 +51,22 @@ app.mount("/", StaticFiles(directory="apps/web-mobile", html=True), name="mobile
 # Mount static files for web2 app
 app.mount("/web2", StaticFiles(directory="apps/web-mobile/web2", html=True), name="web2")
 
+logger = logging.getLogger(__name__)
+
+
 @app.on_event("startup")
 async def schedule_mv_refresh():
+    logger.info(
+        "startup complete", extra={"env": os.getenv("APP_ENV", "dev"), "port": os.getenv("PORT", "8000")}
+    )
+
     async def worker():
         while True:
             try:
                 with engine.connect() as c:
                     c.execute(text("SELECT epx.refresh_places_search_mv();"))
-            except Exception as e:
-                print(f"[MV refresh] error: {e}")
+            except Exception as exc:  # pragma: no cover - defensive logging
+                logger.warning("MV refresh loop error: %s", exc)
             await asyncio.sleep(300)  # 5 min
     asyncio.create_task(worker())
 
@@ -57,35 +75,3 @@ async def root():
     return {"message": "Entertainment Planner API", "version": "1.0.0"}
 
 
-@app.get("/health/db")
-def health_db():
-    """Database health check endpoint for monitoring and deployment."""
-    try:
-        with engine.connect() as c:
-            from sqlalchemy import text
-            # Test basic connectivity
-            c.execute(text("SELECT 1")).scalar()
-            
-            # Get places count for additional verification
-            places_count = c.execute(text("SELECT COUNT(*) FROM places")).scalar()
-            # MV age (seconds since last refresh)
-            age_seconds = c.execute(text("""
-                SELECT EXTRACT(EPOCH FROM (now() - refreshed_at))::int
-                FROM epx.mv_refresh_heartbeat
-                WHERE mv_name = 'places_search_mv'
-            """)).scalar()
-            
-        return {
-            "ok": True,
-            "driver": "postgresql",
-            "places_count": places_count,
-            "dsn": DB_URL.split('@')[-1] if '@' in DB_URL else "masked",
-            "mv_age_seconds": age_seconds
-        }
-    except Exception as e:
-        return {
-            "ok": False, 
-            "error": str(e),
-            "driver": "postgresql",
-            "dsn": DB_URL.split('@')[-1] if '@' in DB_URL else "masked",
-        }
