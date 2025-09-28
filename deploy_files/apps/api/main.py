@@ -2,16 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import asyncio
-import os
 from sqlalchemy import text
 from apps.api.routes import health, places, recommend, admin_places, parse, compose, feedback, config
 from apps.api.routes import debug_version
 from apps.api.routes.db_diag import router as _dbdiag_router
 from apps.core.config import settings
 from apps.core.db import engine, DB_URL
-
-# MV refresh configuration
-REFRESH_MV_INTERVAL = int(os.getenv("REFRESH_MV_INTERVAL", "0"))  # 0 → выключен
 
 # Create FastAPI app
 app = FastAPI(
@@ -50,20 +46,14 @@ app.mount("/web2", StaticFiles(directory="apps/web-mobile/web2", html=True), nam
 
 @app.on_event("startup")
 async def schedule_mv_refresh():
-    if REFRESH_MV_INTERVAL <= 0:
-        print("[MV refresh] disabled (REFRESH_MV_INTERVAL=0)")
-        return
-    
-    print(f"[MV refresh] enabled, interval={REFRESH_MV_INTERVAL}s")
     async def worker():
         while True:
             try:
                 with engine.connect() as c:
-                    c.execute(text("REFRESH MATERIALIZED VIEW epx.places_search_mv;"))
-                print("[MV refresh] completed")
+                    c.execute(text("SELECT epx.refresh_places_search_mv();"))
             except Exception as e:
                 print(f"[MV refresh] error: {e}")
-            await asyncio.sleep(REFRESH_MV_INTERVAL)
+            await asyncio.sleep(300)  # 5 min
     asyncio.create_task(worker())
 
 @app.get("/")

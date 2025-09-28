@@ -1,0 +1,30 @@
+INFO:     Will watch for changes in these directories: ['/Users/user/entertainment planner/entertainment-planner-api']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [20229] using StatReload
+INFO:     Started server process [20231]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:57312 - "POST /api/compose HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57374 - "POST /api/compose HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57423 - "POST /api/compose HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57501 - "POST /api/compose HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57531 - "GET /web2/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57531 - "GET /web2/styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57532 - "GET /web2/app1.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57532 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57532 - "POST /api/parse HTTP/1.1" 200 OK
+Search error: 'latin-1' codec can't encode characters in position 6-11: ordinal not in range(256)
+Traceback: Traceback (most recent call last):
+  File "/Users/user/entertainment planner/entertainment-planner-api/apps/api/routes/places.py", line 80, in search_places
+    response.headers["X-Search-Debug"] = f"query={q}, took={processing_time}ms, results={len(results)}"
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/user/entertainment planner/venv/lib/python3.13/site-packages/starlette/datastructures.py", line 587, in __setitem__
+    set_value = value.encode("latin-1")
+UnicodeEncodeError: 'latin-1' codec can't encode characters in position 6-11: ordinal not in range(256)
+
+INFO:     127.0.0.1:57532 - "GET /api/places/search?q=%D1%8C%D1%84%D0%B5%D1%81%D1%80%D1%84&limit=12&lat=13.74345&lng=100.561412 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57532 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57532 - "GET /api/places/search?q=ma&limit=12&lat=13.74345&lng=100.561412 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57532 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57532 - "GET /api/places/search?q=matcha&limit=12&lat=13.74345&lng=100.561412 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57802 - "GET / HTTP/1.1" 404 Not Found

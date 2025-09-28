@@ -1,4 +1,4 @@
-app = "planner-api-staging"
+app = "planner-api-staging-<nick>"
 primary_region = "sin"
 
 [http_service]

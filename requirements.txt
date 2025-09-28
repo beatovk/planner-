@@ -28,7 +28,6 @@ SQLAlchemy==2.0.43
 starlette==0.47.3
 typing-inspection==0.4.1
 typing_extensions==4.15.0
-uvicorn[standard]==0.35.0
-psycopg[binary]==3.2.3
+uvicorn==0.35.0
 openai==1.51.0
-pandas==2.2.3
+psycopg2-binary==2.9.9

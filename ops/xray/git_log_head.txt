@@ -1,0 +1,3 @@
+33b3bfccb70ee28ad63ad6a61e65599ccfc5fbe9 Improve multi-intent compose rails and frontend ratings
+43394b2dd812a330843c3b5657b585154114122b feat: add sync_published_from_csv.py and local export_published_places.csv for prod sync
+3be8405d04e16f65333088f2a322a05b758ea64f chore: finalize cleanup branch; ensure gitignore matches new state

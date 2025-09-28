@@ -1,0 +1,24 @@
+{
+  "cwd": "/Users/user/entertainment planner",
+  "sys_path": [
+    "",
+    "/Library/Frameworks/Python.framework/Versions/3.13/lib/python313.zip",
+    "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13",
+    "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/lib-dynload",
+    "/Users/user/entertainment planner/venv/lib/python3.13/site-packages"
+  ],
+  "fingerprints": {
+    "apps.api.routes.compose": {
+      "error": "ModuleNotFoundError(\"No module named 'apps'\")"
+    },
+    "apps.places.services.search": {
+      "error": "ModuleNotFoundError(\"No module named 'apps'\")"
+    },
+    "apps.places.services.heuristic_parser": {
+      "error": "ModuleNotFoundError(\"No module named 'apps'\")"
+    },
+    "apps.places.schemas.vibes": {
+      "error": "ModuleNotFoundError(\"No module named 'apps'\")"
+    }
+  }
+}

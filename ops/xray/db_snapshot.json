@@ -1,0 +1,7 @@
+{
+  "connected": false,
+  "error": "DATABASE_URL is not set. Skipping DB xray.",
+  "schema": {},
+  "mv": {},
+  "samples": {}
+}

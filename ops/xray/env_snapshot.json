@@ -1,0 +1,15 @@
+{
+  "APP_ENV": "",
+  "PORT": "",
+  "API_BASE": "",
+  "DATABASE_URL": "",
+  "PGHOST": "",
+  "PGPORT": "",
+  "PGDATABASE": "",
+  "PGUSER": "",
+  "ALLOW_TEXT_FALLBACK": "",
+  "COMPOSE_DISABLE_PARSER": "",
+  "TRACE_RAILS": "",
+  "SMOKE_MOCK": "",
+  "USE_OLD_PIPELINE": ""
+}

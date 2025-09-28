@@ -1,5 +1,6 @@
 import time
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
+import urllib.parse
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, Request
 from sqlalchemy.orm import Session
 from apps.core.db import get_db
 from apps.places.models import Place
@@ -44,6 +45,7 @@ async def search_places(
     radius_m: Optional[int] = Query(None, ge=100, le=50000, description="Search radius in meters"),
     sort: str = Query("relevance", description="Sort order: relevance or distance"),
     area: Optional[str] = Query(None, description="District/area name for filtering"),
+    request: Request = None,
     response: Response = None,
     db: Session = Depends(get_db)
 ):
@@ -75,19 +77,30 @@ async def search_places(
         # Calculate processing time
         processing_time = round((time.time() - start_time) * 1000, 2)  # ms
         
-        # Add debug headers
+        # Add debug headers (URL-quote to avoid UnicodeEncodeError)
         if response:
-            response.headers["X-Search-Debug"] = f"query={q}, took={processing_time}ms, results={len(results)}"
+            debug_raw = f"query={q}, took={processing_time}ms, results={len(results)}"
+            debug_hdr = urllib.parse.quote(debug_raw, safe="=,:;._-@/ ?&+[]()")[:512]  # cap length
+            response.headers["X-Search-Debug"] = debug_hdr
             response.headers["X-Search-Cache"] = f"hits={getattr(search_service, '_cache_hits', 0)}, misses={getattr(search_service, '_cache_misses', 0)}"
         
-        return SearchResponse(
-            results=results,
-            total_count=total_count,
-            query=q or "",
-            limit=limit,
-            offset=offset,
-            has_more=has_more
-        )
+        # Prepare response data
+        data = {
+            "results": results,
+            "total_count": total_count,
+            "query": q or "",
+            "limit": limit,
+            "offset": offset,
+            "has_more": has_more,
+            "processing_time_ms": processing_time
+        }
+        
+        # Add debug info if requested
+        if request and hasattr(request, 'query_params') and request.query_params.get("diag") == "1":
+            data["debug"] = {"q": q, "took_ms": processing_time, "count": len(results)}
+            return data  # Return dict directly for debug mode
+        
+        return SearchResponse(**data)
     
     except Exception as e:
         # Log error and return empty results

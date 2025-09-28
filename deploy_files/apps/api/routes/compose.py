@@ -1083,44 +1083,31 @@ async def compose_rails(
         
         # Гарантируем РОВНО 3 рельсы: если меньше — добираем рекомендационными
         def _suggest_rail(label: str, lat: Optional[float], lng: Optional[float]) -> Rail:
-            # MV backfill на derived flags
-            sql_chill = text("""
-                SELECT id, name, category, summary, lat, lng, picture_url,
-                       gmaps_place_id, gmaps_url, rating, signals
+            # 1) пытаемся по signals != '{}'
+            sql_signals = text("""
+                SELECT id, name, summary, tags_csv, COALESCE(category,'') AS category,
+                       lat, lng, picture_url, rating, signals
                 FROM epx.places_search_mv
-                WHERE processing_status IN ('published','summarized','new')
-                  AND is_chill = TRUE
+                WHERE processing_status IN ('summarized','published')
+                  AND signals <> '{}'::jsonb
                 ORDER BY rating DESC NULLS LAST
-                LIMIT :lim
+                LIMIT 120
             """)
-            rows = db.execute(sql_chill, {"lim": 40}).fetchall()
-            
-            # Если chill пустой, пробуем romantic
+            rows = db.execute(sql_signals).fetchall()
+            # 2) если пусто — подстраховка по «сильным» тегам
             if not rows:
-                sql_romantic = text("""
-                    SELECT id, name, category, summary, lat, lng, picture_url,
-                           gmaps_place_id, gmaps_url, rating, signals
+                sql_tags = text("""
+                    SELECT id, name, summary, tags_csv, COALESCE(category,'') AS category,
+                           lat, lng, picture_url, rating, signals
                     FROM epx.places_search_mv
-                    WHERE processing_status IN ('published','summarized','new')
-                      AND is_romantic = TRUE
-                    ORDER BY (COALESCE((signals->>'dateworthy')::boolean, FALSE)) DESC,
-                             rating DESC NULLS LAST
-                    LIMIT :lim
-                """)
-                rows = db.execute(sql_romantic, {"lim": 40}).fetchall()
-            
-            # Если romantic тоже пустой, пробуем cinema
-            if not rows:
-                sql_cinema = text("""
-                    SELECT id, name, category, summary, lat, lng, picture_url,
-                           gmaps_place_id, gmaps_url, rating, signals
-                    FROM epx.places_search_mv
-                    WHERE processing_status IN ('published','summarized','new')
-                      AND is_cinema = TRUE
+                    WHERE processing_status IN ('summarized','published')
+                      AND (
+                           tags_csv ILIKE ANY (ARRAY['%rooftop%','%gallery%','%park%','%spa%','%vr%','%market%'])
+                          )
                     ORDER BY rating DESC NULLS LAST
-                    LIMIT :lim
+                    LIMIT 120
                 """)
-                rows = db.execute(sql_cinema, {"lim": 40}).fetchall()
+                rows = db.execute(sql_tags).fetchall()
             
             # простая гео-сортировка в приложении (без PostGIS)
             def _dist_km(r):
@@ -1185,26 +1172,6 @@ async def compose_rails(
         
         processing_time = (time.time() - start_time) * 1000
         payload.processing_time_ms = processing_time
-        
-        # Диагностика при diag=1
-        if hasattr(request, 'query_params') and request.query_params.get("diag") == "1":
-            debug = {}
-            try:
-                with db.begin() as conn:
-                    debug["mv_counts"] = {
-                        "is_chill": conn.execute(text("SELECT COUNT(*) FROM epx.places_search_mv WHERE is_chill = TRUE")).scalar(),
-                        "is_romantic": conn.execute(text("SELECT COUNT(*) FROM epx.places_search_mv WHERE is_romantic = TRUE")).scalar(),
-                        "is_cinema": conn.execute(text("SELECT COUNT(*) FROM epx.places_search_mv WHERE is_cinema = TRUE")).scalar(),
-                    }
-                    debug["rails_sizes"] = {r.label: len(r.items) for r in payload.rails}
-                    debug["source"] = "mv-backfill"
-            except Exception as e:
-                debug["error"] = str(e)
-            
-            # Добавляем debug в payload
-            payload_dict = payload.dict()
-            payload_dict["debug"] = debug
-            return payload_dict
         
         # debug headers через FastAPI Response отсутствуют здесь — добавим лёгкую телеметрию в лог
         # debug логирование с acceptance markers и slots
@@ -1351,7 +1318,7 @@ async def test_compose(
         raise HTTPException(status_code=500, detail=f"Failed to test compose: {str(e)}")
 
 
-@router.get("/rails")
+@router.get("/rails", response_model=ComposeResponse)
 async def get_rails(
     mode: Optional[str] = "light",
     vibe: Optional[str] = Query(None, description="Vibe type: chill, romantic, active, artsy, classy, scenic, nightlife, family, trendy, cozy"),
@@ -1365,7 +1332,6 @@ async def get_rails(
     time_slot: Optional[str] = None,
     limit: int = 12,
     quality: Optional[str] = None,
-    diag: Optional[str] = Query(None, description="Enable diagnostics"),
     db: Session = Depends(get_db),
     resp: Response = None
 ):
@@ -1659,12 +1625,12 @@ async def get_rails(
             resp.headers["X-Cache"] = "MISS"
         return final_response
     
-    # default suggested rails (light/vibe mode) - используем derived flags
+    # default suggested rails (light/vibe mode)
     base_sql = """
         SELECT *
         FROM epx.places_search_mv
         WHERE processing_status IN ('summarized','published')
-          AND (is_chill = TRUE OR is_romantic = TRUE OR is_cinema = TRUE)
+          AND signals <> '{}'::jsonb
         ORDER BY COALESCE( (signals->>'interest_score')::float, 0 ) DESC,
                  rating DESC NULLS LAST
         LIMIT :limit
@@ -1687,29 +1653,7 @@ async def get_rails(
             card = _annotate_card_with_signals(card, r)
             items.append(card)
         rails.append(Rail(step=f"suggested_{i+1}", label="Suggested", items=items))
-    
-    response = ComposeResponse(rails=rails, processing_time_ms=0.0, cache_hit=False)
-    
-    # Диагностика при diag=1
-    if diag == "1":
-        debug = {}
-        try:
-            debug["mv_counts"] = {
-                "is_chill": db.execute(text("SELECT COUNT(*) FROM epx.places_search_mv WHERE is_chill = TRUE")).scalar(),
-                "is_romantic": db.execute(text("SELECT COUNT(*) FROM epx.places_search_mv WHERE is_romantic = TRUE")).scalar(),
-                "is_cinema": db.execute(text("SELECT COUNT(*) FROM epx.places_search_mv WHERE is_cinema = TRUE")).scalar(),
-            }
-            debug["rails_sizes"] = {r.label: len(r.items) for r in rails}
-            debug["source"] = "mv-backfill"
-        except Exception as e:
-            debug["error"] = str(e)
-        
-        # Возвращаем словарь с debug
-        response_dict = response.dict()
-        response_dict["debug"] = debug
-        return response_dict
-    
-    return response
+    return ComposeResponse(rails=rails, processing_time_ms=0.0, cache_hit=False)
 
 
 async def _compose_vibe_rails(vibe: str, energy: str, area: Optional[str], 
